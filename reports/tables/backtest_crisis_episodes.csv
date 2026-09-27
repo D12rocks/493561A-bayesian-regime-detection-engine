@@ -1,0 +1,5 @@
+crisis_episode,start_date,end_date,strategy_total_return,benchmark_total_return,alpha_protection,strategy_max_dd
+2013 Taper Tantrum,2013-05-22,2013-08-30,-0.0928,-0.1051,0.0122,-0.1098
+2018 IL&FS Shock,2018-09-01,2018-12-31,-0.0545,-0.07,0.0155,-0.0892
+2020 COVID Crash,2020-02-15,2020-05-15,-0.1161,-0.2457,0.1296,-0.2382
+2024 Election Shock,2024-05-20,2024-06-15,0.0345,0.0445,-0.01,-0.0505
