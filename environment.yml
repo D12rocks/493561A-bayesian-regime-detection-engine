@@ -4,7 +4,7 @@ channels:
   - pytorch
   - defaults
 dependencies:
-  - python=3.11
+  - python=3.10
   - pip=23.3
   - numpy=1.26.4
   - pandas=2.2.1

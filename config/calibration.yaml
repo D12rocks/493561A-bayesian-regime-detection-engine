@@ -2,7 +2,10 @@
 # Zetheta Algorithms - Bayesian Regime Detection Engine
 
 conformal_prediction:
-  alpha: 0.10  # 90% target marginal coverage
+  nominal_alpha: 0.10  # 90% nominal target marginal coverage (does not assume realized == 90%)
+  report_realized_coverage: true
+  track_rolling_coverage: true
+  track_stress_period_coverage: true
   method: "adaptive_prediction_sets"  # split_conformal, adaptive_prediction_sets (APS)
   distribution_shift_robust:
     enabled: true
@@ -12,6 +15,7 @@ conformal_prediction:
 calibration_metrics:
   n_bins: 10
   strategy: "uniform"  # uniform, quantile
-  max_acceptable_ece: 0.08
+  report_ece: true
   compute_brier: true
   rolling_ece_window_days: 63  # ~1 quarter
+  document_calibration_failures: true
