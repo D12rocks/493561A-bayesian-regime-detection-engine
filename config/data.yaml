@@ -1,0 +1,79 @@
+# Configuration for Data Ingestion, Cleaning & Assets
+# Zetheta Algorithms - Bayesian Regime Detection Engine
+
+universe:
+  equities:
+    nifty_50:
+      symbol: "^NSEI"
+      name: "Nifty 50 Index"
+      source: "yahoo"
+      frequency: "daily"
+      columns: ["Open", "High", "Low", "Close", "Volume"]
+    nifty_midcap_100:
+      symbol: "^NSEMDCP50"  # or NIFTY_MIDCAP_100
+      name: "Nifty Midcap 100 Index"
+      source: "yahoo"
+      frequency: "daily"
+      columns: ["Close"]
+    nifty_smallcap_100:
+      symbol: "^NSESMCP"
+      name: "Nifty Smallcap 100 Index"
+      source: "yahoo"
+      frequency: "daily"
+      columns: ["Close"]
+
+  volatility:
+    india_vix:
+      symbol: "^INDIAVIX"
+      name: "India VIX"
+      source: "yahoo"
+      frequency: "daily"
+      columns: ["Close"]
+
+  macro_currencies:
+    usd_inr:
+      symbol: "INR=X"
+      name: "USD/INR Exchange Rate"
+      source: "yahoo"
+      frequency: "daily"
+      columns: ["Close"]
+    gilt_10y:
+      symbol: "IN10YT=RR"
+      name: "India 10Y Benchmark Sovereign Gilt Yield"
+      source: "rbi"
+      frequency: "daily"
+      columns: ["Yield"]
+    aaa_gilt_spread:
+      name: "AAA Corporate Spread over 10Y Gilt"
+      source: "ccil"
+      frequency: "daily"
+      units: "basis_points"
+
+  flows:
+    fii_equity_flow:
+      name: "FII/FPI Net Equity Investment"
+      source: "nsdl"
+      frequency: "daily"
+      units: "inr_crores"
+    dii_equity_flow:
+      name: "DII Net Equity Investment"
+      source: "sebi"
+      frequency: "daily"
+      units: "inr_crores"
+    sip_monthly_total:
+      name: "AMFI Monthly Mutual Fund SIP Contribution"
+      source: "amfi"
+      frequency: "monthly"
+      publication_lag_days: 10
+      units: "inr_crores"
+
+date_range:
+  start_date: "2009-01-01"
+  end_date: "2024-12-31"
+  calendar: "NSE"
+
+missing_data_policy:
+  equity_prices: "strict_drop_or_market_holiday_align"
+  max_forward_fill_days: 3
+  macro_forward_fill: true
+  anomaly_rejection_z_score: 5.0

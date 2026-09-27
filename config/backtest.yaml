@@ -1,0 +1,50 @@
+# Configuration for Historical Backtesting, Monte Carlo & Allocation
+# Zetheta Algorithms - Bayesian Regime Detection Engine
+
+backtest_period:
+  start_date: "2019-01-01"
+  end_date: "2024-12-31"
+
+benchmark:
+  symbol: "^NSEI"
+  name: "Nifty 50 Buy-and-Hold"
+
+allocation_overlay:
+  weights:
+    Risk-On:
+      equity_beta: 1.00
+      large_cap: 0.50
+      mid_small_cap: 0.50
+      cash_hedge: 0.00
+    Late-Cycle:
+      equity_beta: 0.65
+      large_cap: 0.55
+      mid_small_cap: 0.10
+      cash_hedge: 0.35
+    Transitional:
+      equity_beta: 0.40
+      large_cap: 0.40
+      mid_small_cap: 0.00
+      cash_hedge: 0.60
+    Post-Shock:
+      equity_beta: 0.75
+      large_cap: 0.50
+      mid_small_cap: 0.25
+      cash_hedge: 0.25
+    Risk-Off:
+      equity_beta: 0.00
+      large_cap: 0.00
+      mid_small_cap: 0.00
+      cash_hedge: 1.00
+
+execution:
+  rebalance_frequency: "daily"
+  probability_threshold_switch: 0.55
+  transaction_cost_bps: 15.0       # 15 bps round-trip transaction & slippage cost
+  slippage_model: "linear_spread"
+
+monte_carlo_simulation:
+  n_paths: 10000
+  horizon_days: 21                 # 1 trading month forward
+  confidence_levels: [0.95, 0.99]
+  regime_conditioned: true

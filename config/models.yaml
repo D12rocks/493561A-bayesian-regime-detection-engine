@@ -1,0 +1,74 @@
+# Configuration for Model Stack
+# Zetheta Algorithms - Bayesian Regime Detection Engine
+
+n_regimes: 5
+regime_names:
+  - "Risk-On"
+  - "Risk-Off"
+  - "Transitional"
+  - "Late-Cycle"
+  - "Post-Shock"
+
+frequentist_hmm:
+  implementation: "hmmlearn"
+  covariance_type: "full"
+  n_iter: 200
+  tol: 1e-4
+  random_state: 42
+  emission_distribution: "gaussian"  # supports gaussian, student_t
+
+bayesian_hmm:
+  backend: "pymc"  # supports pymc, numpyro
+  n_states: 5
+  mcmc:
+    draws: 1500
+    tune: 1000
+    chains: 4
+    target_accept: 0.95
+    random_seed: 42
+  priors:
+    transition_dirichlet_diag: 12.0
+    transition_dirichlet_offdiag: 1.0
+    mu_prior_mean: 0.0
+    mu_prior_sigma: 1.5
+
+regime_switching_var:
+  lags: 2
+  endog_variables:
+    - "ret_nifty"
+    - "diff_vix"
+    - "ret_usdinr"
+    - "diff_gilt"
+  switching_intercept: true
+  switching_variance: true
+  switching_ar: true
+
+bayesian_deep_learning:
+  mc_dropout:
+    architecture: "temporal_tcn"
+    hidden_dim: 64
+    dropout_rate: 0.25
+    mc_samples: 100
+    learning_rate: 0.001
+    epochs: 50
+  variational_bnn:
+    backend: "pyro"
+    prior_weight_sigma: 1.0
+    prior_bias_sigma: 1.0
+    learning_rate: 0.005
+    elbo_particles: 5
+    epochs: 60
+  deep_ensemble:
+    n_estimators: 5
+    random_seeds: [42, 43, 44, 45, 46]
+
+foundation_models:
+  primary_model: "chronos-t5-small"
+  secondary_model: "timesfm-1.0-200m"
+  fallback_model: "lag-llama"
+  device: "auto"  # auto, cuda, mps, cpu
+  allow_mock_if_unavailable: true
+  adapter:
+    context_length: 64
+    prediction_horizon: 5
+    representation_dim: 32

@@ -1,0 +1,31 @@
+# Configuration for Validation, Splitting & Diagnostics
+# Zetheta Algorithms - Bayesian Regime Detection Engine
+
+splits:
+  training:
+    start_date: "2009-01-01"
+    end_date: "2017-12-31"
+  calibration:
+    start_date: "2018-01-01"
+    end_date: "2018-12-31"
+  test:
+    start_date: "2019-01-01"
+    end_date: "2024-12-31"
+
+walk_forward:
+  enabled: true
+  min_train_days: 1260   # ~5 years
+  recalibration_frequency: "quarterly"  # monthly, quarterly
+  calibration_window_days: 252          # 1 year rolling calibration
+
+mcmc_diagnostic_hurdles:
+  max_r_hat: 1.05
+  min_ess_bulk: 400
+  min_ess_tail: 400
+  max_divergences: 0
+  min_energy_bfmi: 0.30
+
+leakage_prevention:
+  embargo_days: 5
+  strict_chronology_enforcement: true
+  assert_no_future_indices: true

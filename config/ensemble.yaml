@@ -1,0 +1,27 @@
+# Configuration for Model Ensembling & Model Selection
+# Zetheta Algorithms - Bayesian Regime Detection Engine
+
+ensemble_method: "hybrid"  # bma, constrained_stacking, hybrid
+
+admissible_models:
+  - "frequentist_hmm"
+  - "bayesian_hmm"
+  - "regime_switching_var"
+  - "bayesian_deep_learning"
+  - "foundation_model_adapter"
+
+admission_criteria:
+  require_out_of_sample_eval: true
+  max_allowed_ece: 0.12
+  require_valid_mcmc: true
+
+bayesian_model_averaging:
+  weighting_criterion: "psis_loo"  # psis_loo, waic, marginal_likelihood
+  temperature: 1.0
+  prior_model_weights: "uniform"
+
+constrained_stacking:
+  loss_function: "log_loss"  # log_loss, brier_score
+  solver: "scipy_slsqp"
+  simplex_constraint: true
+  l2_regularization: 1e-4

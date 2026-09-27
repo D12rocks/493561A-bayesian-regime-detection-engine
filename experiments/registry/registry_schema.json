@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ExperimentRecord",
+  "description": "Schema for immutable experiment registry records in Zetheta Bayesian Regime Engine",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "timestamp",
+    "data_snapshot_id",
+    "feature_version",
+    "model_family",
+    "model_version",
+    "training_period",
+    "calibration_period",
+    "test_period",
+    "random_seed",
+    "hyperparameters",
+    "metrics",
+    "diagnostics"
+  ],
+  "properties": {
+    "experiment_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "git_commit": { "type": ["string", "null"] },
+    "git_branch": { "type": ["string", "null"] },
+    "data_snapshot_id": { "type": "string" },
+    "feature_version": { "type": "string" },
+    "model_family": { "type": "string" },
+    "model_version": { "type": "string" },
+    "training_period": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string" },
+        "end": { "type": "string" }
+      }
+    },
+    "calibration_period": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string" },
+        "end": { "type": "string" }
+      }
+    },
+    "test_period": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string" },
+        "end": { "type": "string" }
+      }
+    },
+    "random_seed": { "type": "integer" },
+    "hyperparameters": { "type": "object" },
+    "priors": { "type": "object" },
+    "metrics": { "type": "object" },
+    "diagnostics": { "type": "object" },
+    "calibration_results": { "type": "object" },
+    "output_artifacts": { "type": "object" }
+  }
+}

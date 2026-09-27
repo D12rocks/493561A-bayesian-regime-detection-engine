@@ -1,0 +1,17 @@
+# Configuration for Conformal Prediction & Calibration
+# Zetheta Algorithms - Bayesian Regime Detection Engine
+
+conformal_prediction:
+  alpha: 0.10  # 90% target marginal coverage
+  method: "adaptive_prediction_sets"  # split_conformal, adaptive_prediction_sets (APS)
+  distribution_shift_robust:
+    enabled: true
+    algorithm: "aci"  # aci (Adaptive Conformal Inference), mondrian
+    aci_learning_rate_gamma: 0.01
+
+calibration_metrics:
+  n_bins: 10
+  strategy: "uniform"  # uniform, quantile
+  max_acceptable_ece: 0.08
+  compute_brier: true
+  rolling_ece_window_days: 63  # ~1 quarter

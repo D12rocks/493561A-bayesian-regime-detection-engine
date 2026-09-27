@@ -1,0 +1,23 @@
+# Configuration for Sequential & Online Inference Engine
+# Zetheta Algorithms - Bayesian Regime Detection Engine
+
+particle_filter:
+  n_particles: 1000
+  resampling_algorithm: "systematic"  # systematic, residual, multinomial
+  resampling_threshold_ratio: 0.5     # resample when ESS < 0.5 * N
+
+bocpd:
+  hazard_function: "constant"
+  hazard_rate: 0.01                  # prior expected run length 100 days
+  observation_likelihood: "student_t"
+  prior_alpha: 2.0
+  prior_beta: 1.0
+
+streaming_dirichlet:
+  prior_concentration: 1.0
+  forgetting_factor: 0.99            # exponentially decaying sufficient statistics
+
+two_speed_reconciliation:
+  max_allowable_kl_divergence: 0.25
+  alert_on_divergence: true
+  batch_reference_refresh_interval_hours: 24

@@ -1,0 +1,127 @@
+# ==============================================================================
+# CONFIDENTIAL PROJECT - DO NOT PUBLISH OR UPLOAD SENSITIVE ASSETS
+# Zetheta Algorithms Private Limited
+# Bayesian Regime Detection Engine for Equity Direction Forecasting
+# ==============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Environment variables & credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.token
+credentials.json
+client_secrets.json
+auth/
+
+# IDE & Editor specific
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.directory
+
+# Testing & Type Checking
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter Notebooks checkpoints & run state
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+*.nbconvert.ipynb
+
+# Financial Data & Large Artifacts (Strict Non-Tracking)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/cache/*
+!data/cache/.gitkeep
+data/snapshots/*
+!data/snapshots/.gitkeep
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.csv.gz
+
+# Model Checkpoints & Pre-trained Foundation Model Weights
+models/checkpoints/*
+!models/checkpoints/.gitkeep
+models/weights/*
+!models/weights/.gitkeep
+*.pt
+*.pth
+*.onnx
+*.bin
+*.safetensors
+*.ckpt
+
+# R environment & session state
+.Rhistory
+.RData
+.Rproj.user/
+.Renviron
+R/renv/library/
+R/renv/local/
+R/renv/staging/
+
+# Experiment Registry Outputs & Run Artifacts
+experiments/runs/*
+!experiments/runs/.gitkeep
+mlruns/
+.mlflow/
+
+# OS specific temporary files
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
