@@ -1,0 +1,6 @@
+model,type,objective,key_metric_1,key_metric_2,uncertainty_type,hardware_accel
+Frequentist HMM,Probabilistic Graphical Model,Maximum Likelihood (EM),AIC: -56218.5,BIC: -55446.1,Point Posterior,CPU Native
+Bayesian HMM,Full Bayesian MCMC (Sticky Gibbs),Posterior Sampling (FFBS),R-hat Conv: 40%,Sticky Kappa: 8.0,Epistemic + Aleatoric,CPU Native
+RS-VAR,Hamilton Filter / Kim Smoother,State-Dependent VAR(1),Log-Lik: 44816.4,Lags: 1,Filtered / Smoothed,CPU Native
+Bayesian DL (MC Dropout),Neural Network Ensemble,Variational MC Dropout,Loss: 1.2434,MC Passes: 50,Mutual Information,CPU / Metal
+Chronos Adapter,Foundation Model Representation Probe,Zero-shot Latent Projection,Probe Acc: 23.77%,Silhouette: -0.009,Softmax Entropy,CPU / Transformers
