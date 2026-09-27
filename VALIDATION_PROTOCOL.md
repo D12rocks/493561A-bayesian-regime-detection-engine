@@ -70,12 +70,22 @@ $$\{ (x_t, y_t) \}_{t=1}^T \text{ is non-exchangeable due to serial correlation,
    where $\gamma \in [0.005, 0.05]$ is the learning rate and $\text{err}_t = \mathbb{I}(y_t \notin \mathcal{C}_{\alpha_t}(x_t))$.
 2. **Mondrian / Group-Balanced Conformal**:
    Non-conformity scores are calibrated conditionally within high-volatility vs low-volatility partitions to ensure coverage does not collapse precisely when volatility spikes.
+3. **Mandatory Conformal Coverage Reporting**:
+   - For a nominal significance level $\alpha = 0.10$ (nominal 90% coverage), the engine does **NOT** assume realized empirical coverage will equal 90%.
+   - The system must explicitly measure and report:
+     - Nominal coverage vs realized empirical coverage across splits.
+     - Rolling 63-day empirical coverage.
+     - Specific empirical coverage during market stress periods (e.g. March 2020, election spikes).
+     - Average prediction set cardinality (efficiency).
+     - Documented coverage failure incidents and underlying distribution shifts.
 
 ---
 
-## 5. Bayesian MCMC Posterior Diagnostic Standards
+## 5. Bayesian MCMC Posterior Diagnostic Standards & Model Validation
 
-A Bayesian model (such as the Bayesian HMM or BNN) is **never** considered valid merely because the sampling algorithm finished without raising an exception. Every MCMC run must satisfy:
+A Bayesian model (such as the Bayesian HMM or BNN) is **never** considered valid merely because the sampling algorithm finished without raising an exception. Furthermore, a model that converges is **not** automatically assumed to be structurally good; actual out-of-sample predictive evidence is required for ensemble inclusion.
+
+Every MCMC run must satisfy and honestly report:
 
 1. **Gelman-Rubin Diagnostic ($\hat{R}$)**:
    $$\hat{R} < 1.05 \quad \text{for all latent and structural parameters.}$$
@@ -85,6 +95,10 @@ A Bayesian model (such as the Bayesian HMM or BNN) is **never** considered valid
    Zero numerical divergences during NUTS sampling. Any divergence indicates regions of high posterior curvature that the sampler failed to explore.
 4. **Energy Bayesian Fraction of Missing Information (E-BFMI)**:
    $$\text{E-BFMI} > 0.3 \quad \text{for all sampling chains.}$$
+5. **Trace Diagnostics**:
+   Visual and numerical inspection of MCMC chains for stationarity and absence of sticky exploration.
+6. **No Fabrication Rule**:
+   Never fabricate or simulate successful diagnostic metrics. If sampling displays low ESS or divergences, record the exact diagnostic telemetry honestly.
 
 ---
 

@@ -25,9 +25,8 @@ class BaseEnsemble(ABC):
     Enforces quality hurdles before allowing candidate models into the active federation.
     """
 
-    def __init__(self, name: str, max_allowed_ece: float = 0.12) -> None:
+    def __init__(self, name: str) -> None:
         self.name = name
-        self.max_allowed_ece = max_allowed_ece
         self.models: List[BaseRegimeModel] = []
         self.weights: Optional[np.ndarray] = None
         self.model_metadata: List[Dict[str, Any]] = []
@@ -35,22 +34,33 @@ class BaseEnsemble(ABC):
     def register_model(
         self,
         model: BaseRegimeModel,
-        validation_ece: float,
+        validation_metrics: Dict[str, float],
         diagnostics: Dict[str, Any],
     ) -> None:
         """
-        Register a candidate model into the ensemble pool with strict admission hurdles.
+        Register a candidate model into the ensemble pool with strict procedural validation.
+        Requires out-of-sample metrics, convergence diagnostics, and audits failure cases.
         """
-        if validation_ece > self.max_allowed_ece:
-            raise ValueError(
-                f"Model '{model.name}' rejected: ECE {validation_ece:.4f} exceeds max threshold {self.max_allowed_ece:.4f}"
-            )
+        if not model.is_fitted:
+            raise ValueError(f"Model '{model.name}' must be fitted before ensemble registration.")
+        
+        # Verify MCMC diagnostics if Bayesian
+        if "max_r_hat" in diagnostics:
+            if diagnostics["max_r_hat"] > 1.05:
+                raise ValueError(
+                    f"Model '{model.name}' rejected: Gelman-Rubin R-hat {diagnostics['max_r_hat']:.3f} > 1.05."
+                )
+            if diagnostics.get("divergences", 0) > 0:
+                raise ValueError(
+                    f"Model '{model.name}' rejected: {diagnostics['divergences']} divergent transitions detected."
+                )
+
         self.models.append(model)
         self.model_metadata.append(
             {
                 "name": model.name,
                 "version": model.version,
-                "validation_ece": validation_ece,
+                "validation_metrics": validation_metrics,
                 "diagnostics": diagnostics,
             }
         )

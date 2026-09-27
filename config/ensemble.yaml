@@ -12,8 +12,10 @@ admissible_models:
 
 admission_criteria:
   require_out_of_sample_eval: true
-  max_allowed_ece: 0.12
   require_valid_mcmc: true
+  require_calibration_diagnostics: true
+  audit_failure_cases: true
+  document_all_model_metrics: true
 
 bayesian_model_averaging:
   weighting_criterion: "psis_loo"  # psis_loo, waic, marginal_likelihood

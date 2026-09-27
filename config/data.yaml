@@ -37,17 +37,31 @@ universe:
       source: "yahoo"
       frequency: "daily"
       columns: ["Close"]
+      availability:
+        lag_type: "same_day_eod"
+        lag_days: 0
+        status: "verified"
     gilt_10y:
       symbol: "IN10YT=RR"
       name: "India 10Y Benchmark Sovereign Gilt Yield"
       source: "rbi"
       frequency: "daily"
       columns: ["Yield"]
+      availability:
+        lag_type: "next_day_rbi_bulletin"
+        lag_days: 1
+        status: "requires_verification"
+        fallback_treatment: "quarantine_from_production"
     aaa_gilt_spread:
       name: "AAA Corporate Spread over 10Y Gilt"
       source: "ccil"
       frequency: "daily"
       units: "basis_points"
+      availability:
+        lag_type: "t_plus_1"
+        lag_days: 1
+        status: "requires_verification"
+        fallback_treatment: "quarantine_from_production"
 
   flows:
     fii_equity_flow:
@@ -55,17 +69,37 @@ universe:
       source: "nsdl"
       frequency: "daily"
       units: "inr_crores"
+      availability:
+        lag_type: "t_plus_1_nsdl_eod"
+        lag_days: 1
+        status: "verified"
+        notes: "SEBI/NSDL reporting published after market close on T or morning of T+1"
     dii_equity_flow:
       name: "DII Net Equity Investment"
       source: "sebi"
       frequency: "daily"
       units: "inr_crores"
+      availability:
+        lag_type: "t_plus_1_sebi"
+        lag_days: 1
+        status: "verified"
     sip_monthly_total:
       name: "AMFI Monthly Mutual Fund SIP Contribution"
       source: "amfi"
       frequency: "monthly"
-      publication_lag_days: 10
       units: "inr_crores"
+      availability:
+        lag_type: "monthly_release"
+        estimated_lag_calendar_days: 10
+        status: "requires_verification"
+        lag_methodology: "amfi_press_release_calendar"
+        fallback_treatment: "quarantine_from_production"
+        notes: "AMFI releases SIP totals between 8th and 14th of following month. Exact date requires point-in-time press release timestamp."
+
+point_in_time_safety:
+  enforce_availability_cutoff: true
+  allow_unverified_in_research: false  # Quarantine unverified sources from production inference
+  quarantine_action: "exclude_or_raise"
 
 date_range:
   start_date: "2009-01-01"
