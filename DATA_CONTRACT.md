@@ -120,11 +120,17 @@ class RegimePrediction:
 
 ---
 
-## 5. Missing Data Treatment & Sanity Checks
+## 5. Missing Data Treatment & Point-in-Time Availability
 
-1. **Trading Holiday Alignment**: Indian market holidays (NSE calendar) must be uniformly aligned. If asset prices are absent due to an official market holiday, the date is excluded across all asset equations rather than zero-filled.
-2. **Macro Variable Forward-Filling**: Monthly SIP and macro series are released with reporting lags. They may only be forward-filled from their **official publication date**, not their observation reference date, to eliminate look-ahead leakage.
+1. **Trading Holiday Alignment**: Indian market holidays (NSE calendar) must be uniformly aligned. If asset prices are absent due to an official market holiday, the date is excluded across all asset equations rather than zero-filled or artificially interpolated.
+2. **Point-in-Time Availability Rule**:
+   $$\text{availability\_date} \le \text{prediction\_timestamp}$$
+   - No universal "+10 trading days" lag is assumed.
+   - Every macro and institutional flow series must document its observation date, official publication date, release lag, and lag methodology.
+   - If the exact historical publication timestamp cannot be verified, the lag must be made configurable and the source marked as `requires_verification` and quarantined from production usage until verified.
 3. **Outlier and Anomaly Filters**:
    - Price jumps $> 20\%$ within single daily sessions trigger anomaly investigation.
    - VIX quotes $< 5.0$ or $> 90.0$ require raw source audit.
    - Flow data sign reversals exceeding 5 standard deviations trigger source re-query.
+4. **Explicit Missing-Value Audit**:
+   - For every missing observation, the engine logs whether it is left missing, dropped, or carried forward, accompanied by the economic/statistical rationale. Never silently forward-fill financial series.

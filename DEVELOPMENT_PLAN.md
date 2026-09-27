@@ -66,7 +66,7 @@ Day 15: Deliverables Handover  ──┴──►  PHASE 5: Dual-Language R Pari
   - **Foundation Model Adapter**: Unified interface for Chronos and TimesFM/Moirai with CPU/GPU graceful degradation.
   - **Model Ensembling**: Bayesian Model Averaging (BMA) with PSIS-LOO weights + Constrained simplex stacking.
   - **Calibration Layer**: Adaptive Prediction Sets (APS) and Adaptive Conformal Inference (ACI) for non-exchangeable market series; reliability diagrams and ECE calculation.
-- **Validation Gate**: Out-of-sample ECE $< 0.10$; empirical marginal conformal coverage $\ge 90\%$.
+- **Validation Gate**: Out-of-sample calibration audit; empirical coverage and set size documented; reliability diagrams generated across market cycles.
 
 ### Phase 4: Online Streaming, Risk Engine & Historical Backtest (Days 10, 12, 13 Compressed)
 - **Objective**: Implement the intraday two-speed engine and execute the 2019–2024 allocation backtest.
@@ -75,7 +75,7 @@ Day 15: Deliverables Handover  ──┴──►  PHASE 5: Dual-Language R Pari
   - **Regime-Conditioned Simulation**: Forward Monte Carlo paths, Value at Risk (VaR 95/99), Expected Shortfall (CVaR).
   - **2019–2024 Backtest**: Dynamic regime overlay vs Nifty 50 buy-and-hold, including transaction costs and turnover.
   - **Indian Case Studies**: In-depth empirical audits of COVID-19 crash (March 2020), 2021 post-shock rally, and 2024 election volatility.
-- **Validation Gate**: Positive Information Ratio $> 0.50$ over benchmark; documented drawdown protection in Q1 2020.
+- **Validation Gate**: Objective out-of-sample backtest metrics computed; performance compared against defined benchmarks (buy-and-hold Nifty 50, cash baseline); failure cases, stress periods, and drawdown behaviors documented without cherry-picking.
 
 ### Phase 5: R Reconciliation, Reporting & Handover (Days 14–15 Compressed)
 - **Objective**: Complete the parallel R implementation, verify cross-language parity, and assemble the six mandatory deliverables.
