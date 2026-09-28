@@ -28,7 +28,7 @@
 | **Foundation Probe** | Chronos T5 Latent Probe | Context length $L=64$, embedding dimension $D=16$ | Out-of-sample probing accuracy: 23.77% |
 | **Ensemble Aggregation** | Simplex Stacking (SLSQP) | Simplex bounds $w_m \ge 0$, $\sum w_m = 1.0$, cross-entropy loss | Bayesian HMM selected with 100% weight |
 | **Post-Hoc Calibration**| Temperature Scaling | Optimal temperature $T = 0.0500$ | ECE: $0.0350 \to 0.0014$ (96.1% calibration improvement) |
-| **Conformal Inference** | Adaptive Conformal Inference (ACI) | Nominal significance $\alpha = 0.10$, adaptation rate $\gamma = 0.015$ | Realized empirical coverage: 100.0% (Average set size: 1.00) |
+| **Conformal Inference** | Adaptive Conformal Inference (ACI) | Nominal significance $\alpha = 0.10$, adaptation rate $\gamma = 0.015$ | Realized empirical coverage: 91.33% against 90.0% target (Mean set size: 3.06) |
 
 ---
 
@@ -55,9 +55,9 @@ Evaluated over out-of-sample period (2019–2024) against mandatory reference ba
 ---
 
 ## 4. Backtesting & Walk-Forward Performance (2019–2024)
-- **CAGR:** 12.67% (Benchmark: 13.50%)
-- **Annualized Volatility:** 12.83% (Benchmark: 19.80% — a 35.2% volatility reduction)
-- **Sharpe Ratio ($R_f=6.5\%$):** 0.49
+- **CAGR:** 12.67% (Benchmark: 13.51%)
+- **Annualized Volatility:** 12.83% (Benchmark: 18.32% — a 29.9% volatility reduction)
+- **Sharpe Ratio ($R_f=6.5\%$):** 0.49 (Benchmark: 0.44)
 - **Maximum Drawdown:** -23.82% (Benchmark DD: -38.44% — preserving +14.62% downside capital)
 - **COVID Crash Alpha Protection:** +12.96% (Benchmark -24.57% vs Strategy -11.61%)
 - **Deflated Sharpe Ratio (DSR):** 0.112

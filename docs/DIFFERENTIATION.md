@@ -50,7 +50,7 @@ This document establishes the 7 institutional-grade differentiators that elevate
   - **GNN Sector Graph:** Models the relational topology of Indian sectors (`NIFTY_BANK`, `NIFTY_IT`, `NIFTY_MIDCAP_50`, etc.), extracting spectral radius, algebraic connectivity (Fiedler value $\lambda_2$), von Neumann graph entropy, and 2-layer Graph Convolutional Network (GCN) readout embeddings.
 - **Why It Matters:** Traditional quant models look only at marginal returns. TDA and GNN capture higher-order phase transitions, systemic correlation spikes, and sectoral decoupling before they appear in simple price moving averages.
 - **Implementation Location:** [`src/features/tda.py`](file:///Users/dhruvarora/bayesian-regime-detection-engine/src/features/tda.py), [`src/features/gnn.py`](file:///Users/dhruvarora/bayesian-regime-detection-engine/src/features/gnn.py).
-- **Empirical Evidence:** Both TDA and GNN features are proven strictly stationary via Augmented Dickey-Fuller tests ($p < 0.001$, see [`reports/tables/feature_stationarity_summary.csv`](file:///Users/dhruvarora/bayesian-regime-detection-engine/reports/tables/feature_stationarity_summary.csv)).
+- **Empirical Evidence:** Both TDA and GNN features are empirically verified stationary via Augmented Dickey-Fuller tests ($p < 0.001$, see [`reports/tables/feature_stationarity_summary.csv`](file:///Users/dhruvarora/bayesian-regime-detection-engine/reports/tables/feature_stationarity_summary.csv)).
 - **Limitations:** TDA sliding-window filtration over $W=60$ days has cubic complexity in window points, requiring representative subsampling for speed.
 
 ---

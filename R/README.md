@@ -18,10 +18,12 @@
 |:---|:---|:---|:---|
 | **depmixS4 HMM** | [`R/models/hmm_depmixs4.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/models/hmm_depmixs4.R) | 5-State Hidden Markov Model with Gaussian emissions fitted via EM. | `depmixS4`, `jsonlite` |
 | **MSwM / MS-VAR** | [`R/models/ms_var.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/models/ms_var.R) | Markov-Switching Vector Autoregression with filtered and smoothed probabilities. | `MSwM`, `jsonlite` |
-| **Bayesian HMM Spec** | [`R/models/bayesian_hmm.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/models/bayesian_hmm.R) | Bayesian regime specification via Gibbs sampling / MCMC. | `MCMCpack`, `jsonlite` |
+| **Bayesian Regime (rstanarm / Stan)** | [`R/models/bayesian_regime_rstanarm.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/models/bayesian_regime_rstanarm.R) | Bayesian regime modeling via `rstanarm` and native Stan (`bayesian_hmm.stan`). | `rstanarm`, `rstan`, `jsonlite` |
+| **Bayesian HMM Spec (Reference)** | [`R/models/bayesian_hmm.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/models/bayesian_hmm.R) | Bayesian regime specification via Gibbs sampling / MCMCpack. | `MCMCpack`, `jsonlite` |
 | **Changepoint (PELT)**| [`R/models/changepoint.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/models/changepoint.R) | Pruned Exact Linear Time (PELT) variance and mean/variance regime shifts. | `changepoint`, `jsonlite` |
 | **Conformal Prediction** | [`R/validation/conformal.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/validation/conformal.R) | Split Conformal Inference with finite-sample marginal coverage verification. | `jsonlite` |
 | **Reconciliation Engine** | [`R/reconciliation/reconcile_python_r.R`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/reconciliation/reconcile_python_r.R) | Evaluates state sequence alignment between Python and R implementations. | `jsonlite` |
+| **Environment Lockfile** | [`R/renv.lock`](file:///Users/dhruvarora/bayesian-regime-detection-engine/R/renv.lock) | Exact R package lockfile for reproduction in R 4.3. | `renv` |
 
 ---
 

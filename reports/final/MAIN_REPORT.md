@@ -126,24 +126,60 @@ Empirical Indian market dynamics reject standard 2-state (Bull/Bear) models as o
 4. **Risk-Off (Bear Volatile):** Liquidity contagion, synchronized cross-asset decline, spikes in VIX ($> 28$), negative momentum, breakdown in support levels.
 5. **Post-Shock (Recovery / Rebound):** High realized volatility, oversold mean-reversion, institutional short-covering, policy intervention.
 
-### 3.1 Formal Target Definition & Forensic Mapping (Non-Circular Verification)
-To prevent target circularity and lookahead contamination, the independent forward target is constructed objectively from market realizations:
+### 3.1 Latent Economic Regimes vs. Independent Forward Evaluation Target
+
+A foundational methodological distinction must be drawn between the underlying economic state of the financial system and the statistical target used to evaluate predictive models:
+
+#### A. Economic Latent Regimes (Unobserved Data-Generating Process)
+The five latent regimes defined by the Zetheta specification—**Risk-On, Late-Cycle, Transitional, Post-Shock, and Risk-Off**—are unobservable latent macroeconomic states. The financial market does not produce externally verified daily ground-truth labels for these regimes. Rather, they represent distinct structural regimes of the underlying data-generating process (DGP), characterized by varying distributions of multi-asset risk premia, volatility clustering, market breadth, and liquidity feedback loops.
+
+#### B. Independent Forward Evaluation Target (Objective Outcome Proxy)
+> [!IMPORTANT]
+> **The independent forward target is an outcome proxy used for honest out-of-sample probabilistic evaluation. It is not the same thing as directly observed ground-truth latent regime labels.**
+
+To evaluate probabilistic forecasts out-of-sample without circularity (i.e. without evaluating an HMM against its own in-sample Viterbi path or another unsupervised clusterer's labels), we construct an objective, point-in-time forward outcome target. This causal target is derived strictly from observable future price realizations over an untouched 5-day forward horizon:
+
 - **Forward Horizon:** Exactly 5 trading days forward ($t+1$ to $t+5$).
-- **Return Formula:** $R_{t, t+5} = \sum_{\tau=1}^5 r_{t+\tau}$, where $r_\tau = \ln(P_\tau / P_{\tau-1})$ of NIFTY 50 daily close.
-- **Realized Volatility Definition:** $V_{t, t+5} = \sqrt{\frac{1}{4} \sum_{\tau=1}^5 (r_{t+\tau} - \bar{r})^2}$, the sample standard deviation of forward 5-day daily returns.
-- **Vol Anchor:** $\text{vol\_median} = \text{median}(V_{t, t+5})$ computed strictly on the training period (2009–2018) to avoid test lookahead leakage.
-- **Class Construction & Boundaries:**
-  * **Class 0 (Risk-On):** $R_{t, t+5} > +1.0\%$ and $V_{t, t+5} \le \text{vol\_median}$ (High forward return, benign volatility).
-  * **Class 1 (Late-Cycle):** $R_{t, t+5} > +1.0\%$ and $V_{t, t+5} > \text{vol\_median}$ (High forward return, elevated froth/volatility).
-  * **Class 2 (Transitional):** $|R_{t, t+5}| \le 1.0\%$ (Range-bound sideways price action, low directional trend).
-  * **Class 3 (Post-Shock):** $R_{t, t+5} > +2.0\%$ and $V_{t, t+5} > 1.5 \times \text{vol\_median}$ (High-volatility recovery rebound).
-  * **Class 4 (Risk-Off):** $R_{t, t+5} < -1.0\%$ or remaining high-volatility drawdown states (Severe downside distress).
-- **RPS Ordering & Cumulative Space:**
-  For Ranked Probability Score (RPS), classes are ordered along the continuous risk/return spectrum:
-  $$\text{Ordered Regimes: } [\text{Class 0: Risk-On}] \prec [\text{Class 1: Late-Cycle}] \prec [\text{Class 3: Post-Shock}] \prec [\text{Class 2: Transitional}] \prec [\text{Class 4: Risk-Off}]$$
-  RPS evaluates cumulative probability mass vectors $P_m = \sum_{k=1}^m p_k$ vs step observations $O_m = \sum_{k=1}^m \mathbf{1}(Y = k)$:
-  $$\text{RPS} = \frac{1}{K-1} \sum_{m=1}^{K-1} (P_m - O_m)^2$$
-  *RPS vs Log Loss Behavior:* Persistence achieves low RPS (0.1577) because daily regime transitions rarely skip adjacent categories, bounding $(P_m - O_m)^2$. However, under logarithmic proper scoring (Log Loss), Deep Ensemble decisively outperforms Persistence (1.2847 vs 1.9083, +32.68% skill) because Persistence incurs heavy penalties whenever an unexpected regime boundary is crossed.
+- **Forward Return Realization:** $R_{t, t+5} = \sum_{\tau=1}^5 r_{t+\tau}$, where $r_\tau = \ln(P_\tau / P_{\tau-1})$ of NIFTY 50 daily close.
+- **Forward Realized Volatility:** $V_{t, t+5} = \sqrt{\frac{1}{4} \sum_{\tau=1}^5 (r_{t+\tau} - \bar{r})^2}$, the sample standard deviation of forward 5-day daily returns.
+- **Volatility Anchor:** $\text{vol\_median} = \text{median}(V_{t, t+5})$ computed strictly on the training period (2009–2018) to avoid test lookahead leakage.
+- **Proxy Partitioning & Thresholds:**
+  * **Class 0 (Risk-On Proxy):** $R_{t, t+5} > +1.0\%$ and $V_{t, t+5} \le \text{vol\_median}$ (High forward return, benign volatility).
+  * **Class 1 (Late-Cycle Proxy):** $R_{t, t+5} > +1.0\%$ and $V_{t, t+5} > \text{vol\_median}$ (High forward return, elevated froth/volatility).
+  * **Class 2 (Transitional Proxy):** $|R_{t, t+5}| \le 1.0\%$ (Range-bound sideways price action, low directional trend).
+  * **Class 3 (Post-Shock Proxy):** $R_{t, t+5} > +2.0\%$ and $V_{t, t+5} > 1.5 \times \text{vol\_median}$ (High-volatility recovery rebound).
+  * **Class 4 (Risk-Off Proxy):** $R_{t, t+5} < -1.0\%$ or remaining high-volatility drawdown states (Severe downside distress).
+
+---
+
+### 3.2 Methodology: Why RPS Ordering Is Defined This Way
+
+The Ranked Probability Score (RPS) is a strictly proper scoring rule for categorical forecasts when the underlying categories possess a natural ordinal structure. For a forecast probability vector $\mathbf{p} = (p_1, \dots, p_K)$ and observation $Y \in \{1, \dots, K\}$, RPS measures the quadratic distance between cumulative distribution functions:
+$$\text{RPS}(\mathbf{p}, Y) = \frac{1}{K-1} \sum_{m=1}^{K-1} \left( P_m - O_m \right)^2, \quad \text{where } P_m = \sum_{k=1}^m p_k, \quad O_m = \sum_{k=1}^m \mathbf{1}(Y = k)$$
+
+Unlike multiclass Log Loss or Brier Score—which treat all misclassification errors symmetrically—RPS penalizes probability mass that is deposited far away from the true realization along the ordinal index. Consequently, the assigned ordinal sequence must reflect a mathematically and economically defensible continuum.
+
+#### Mathematical Justification for the Ordinal Spectrum
+We order the forward target classes along the monotonic return-to-risk and downside tail distress spectrum:
+$$\text{Ordinal Spectrum: } [\text{Class 0: Risk-On}] \prec [\text{Class 1: Late-Cycle}] \prec [\text{Class 3: Post-Shock}] \prec [\text{Class 2: Transitional}] \prec [\text{Class 4: Risk-Off}]$$
+
+This ordering is justified by examining the joint conditional expectations $(\mathbb{E}[R \mid C], \mathbb{E}[V \mid C])$ and tail loss exposure:
+
+1. **State 0 (Risk-On) — Index 1:** Maximum positive expected return with minimum realized volatility ($\mathbb{E}[R] > +1\%$, $V \le \sigma_{\text{med}}$). Represents the optimal Sharpe state where equity capital is fully deployed.
+2. **State 1 (Late-Cycle) — Index 2:** Positive expected return ($\mathbb{E}[R] > +1\%$), but volatility expands ($V > \sigma_{\text{med}}$). The risk-reward ratio degrades relative to State 0, but directional drift remains bull-biased.
+3. **State 3 (Post-Shock) — Index 3:** Positive expected return ($\mathbb{E}[R] > +2\%$), but volatility is turbulent ($V > 1.5\sigma_{\text{med}}$). While directional upside is large, downside variance and tail dispersion are severe. It occupies the transition point between bull expansion and market distress.
+4. **State 2 (Transitional) — Index 4:** Neutral directional return ($|R| \le 1\%$) with baseline volatility. Expected equity risk premium is zero; capital is exposed to whipsaws without directional compensation.
+5. **State 4 (Risk-Off) — Index 5:** Negative expected return ($R < -1\%$) and severe drawdown risk. Represents capital impairment and extreme tail loss.
+
+#### Alignment with the Economic Loss Function
+Under this ordering, the cumulative probability difference $(P_m - O_m)$ imposes penalties proportional to the severity of economic misallocation:
+- An off-by-one error (e.g. predicting Late-Cycle when true realization is Risk-On) incurs minimal penalty $\frac{1}{4}(1)^2 = 0.25$ on one threshold, reflecting that both are bull-biased equity deployment states.
+- A catastrophic error (predicting Risk-On when true realization is Risk-Off) shifts cumulative mass across all 4 thresholds, incurring the maximum penalty $\frac{1}{4}(1 + 1 + 1 + 1) = 1.0$, which corresponds to full allocation right before a market crash.
+- Predicting Transitional when true state is Post-Shock is adjacent, recognizing that both are regimes of structural macro indecision/reorganization.
+
+#### RPS vs. Log Loss Empirical Behavior
+In our out-of-sample holdout (2022–2024), Persistence achieves a low RPS of **0.1577** (vs. Deep Ensemble's **0.2027**) because daily market states exhibit serial autocorrelation; persistence forecasts put 100% mass on yesterday's state, which is almost always within distance $\le 1$ along the ordinal chain. However, under Log Loss, Deep Ensemble achieves **1.2847** vs. Persistence **1.9083** (+32.68% skill) because when transitions *do* occur, Persistence assigns $p_{\text{true}} \approx 0$, suffering infinite logarithmic divergence penalties, whereas Bayesian ensembles maintain calibrated support over all possible transitions.
+
 
 
 ---
@@ -295,18 +331,19 @@ Where:
 
 | Performance Metric | Strategy Overlay | NIFTY 50 Benchmark | Differential / Value Added |
 | :--- | :---: | :---: | :---: |
-| **Total Return** | **105.74%** | **132.81%** | -27.07% (Risk-Managed) |
-| **CAGR** | **12.67%** | **15.12%** | -2.45% |
-| **Annualized Volatility** | **12.83%** | **19.80%** | **-6.97% (35.2% Vol Reduction)** |
-| **Sharpe Ratio ($R_f=6.5\%$)** | **0.49** | **0.35** | **+0.14 (+40.0% Risk-Adjusted)** |
-| **Sortino Ratio** | **0.67** | **0.46** | **+0.21 (+45.7%)** |
+| **Total Cumulative Return** | **101.45%** | **113.87%** | -12.42% (Risk-Managed) |
+| **CAGR** | **12.67%** | **13.51%** | -0.84% |
+| **Annualized Volatility** | **12.83%** | **18.32%** | **-5.49% (29.9% Vol Reduction)** |
+| **Sharpe Ratio ($R_f=6.5\%$)** | **0.49** | **0.44** | **+0.05 (+11.4% Risk-Adjusted)** |
+| **Sortino Ratio** | **0.58** | **0.46** | **+0.12 (+26.1%)** |
 | **Max Drawdown** | **-23.82%** | **-38.44%** | **+14.62% Capital Preserved** |
-| **Calmar Ratio** | **0.53** | **0.39** | **+0.14** |
-| **Information Ratio** | **-0.23** | 0.00 | Tracking Error: 10.74% |
-| **Annual Turnover** | **44.91%** | 0.00% | Low Turnover (Hysteresis) |
+| **Calmar Ratio** | **0.53** | **0.35** | **+0.18** |
+| **Information Ratio** | **-0.26** | 0.00 | Tracking Error: 7.25% |
+| **Annual Turnover** | **314.81%** | 0.00% | Daily Overlay Rebalancing |
 | **COVID Crash (Q1 2020)** | **-11.61%** | **-24.57%** | **+12.96% Alpha Protection** |
 | **Deflated Sharpe (DSR)** | **0.112** | N/A | Evaluated over 15 configurations tried |
 | **Probability of Backtest Overfitting (PBO)**| **PARTIAL** (0.34) | N/A | Sub-split CSCV; multi-asset pending |
+
 
 ### 8.3 Overfitting Safeguards & Attestation
 1. **Configurations Tried Disclosed:** Exactly 15 parameter combinations were evaluated across grid permutations of No-Trade Bands (2%, 4%, 6%) and Daily Turnover Caps (5%, 10%, 15%). The final champion parameters (4% band, 10% cap) were selected on the 2019–2021 calibration split and frozen before touching the 2022–2024 holdout.

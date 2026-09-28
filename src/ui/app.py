@@ -188,7 +188,7 @@ elif nav_choice == "3. Model Lab":
 # -----------------------------------------------------------------------------
 elif nav_choice == "4. Historical Market Replay":
     st.title("⏪ Historical Market Replay")
-    st.markdown("Point-in-time replay of canonical Indian market crisis episodes. Zero future leakage guaranteed.")
+    st.markdown("Point-in-time replay of canonical Indian market crisis episodes. Zero future lookahead strictly enforced by point-in-time architecture.")
 
     scen_choice = st.selectbox(
         "Select Historical Crisis Episode",

@@ -16,6 +16,21 @@ This project delivers the complete, institutional-grade quantitative platform **
 
 **Forensic Audit Disclosure:** Following an adversarial red-team audit, in-sample pseudo-label circularity was eliminated. The system was re-evaluated under strict, non-circular chronological splits (Train: 2009–2018, Calibration: 2019–2021, Holdout Test: 2022–2024). Under this out-of-sample holdout, the **Deep Ensemble** achieved an audited Log Loss of **1.2847**, Brier Score of **0.7065**, and RPS of **0.2027**, outperforming both the **Climatology Baseline** (Log Loss: 1.3097) and **Persistence Baseline** (Log Loss: 1.9083). Adaptive Conformal Inference achieved **91.33% realized empirical coverage** against a nominal 90.0% target.
 
+#### 1.1 Methodological Clarification: Latent Regimes vs. Independent Forward Target
+A critical distinction exists between the unobserved data-generating process and the statistical evaluation proxy:
+1. **Economic Latent Regimes:** The five regimes (Risk-On, Late-Cycle, Transitional, Post-Shock, Risk-Off) are unobservable structural states of the financial market. The market itself produces no daily externally verified ground-truth labels for these regimes.
+2. **Independent Forward Evaluation Target:** An objective, point-in-time outcome target constructed strictly from forward 5-day market realizations ($R_{t, t+5}, V_{t, t+5}$).
+> **"The independent forward target is an outcome proxy used for honest out-of-sample probabilistic evaluation. It is not the same thing as directly observed ground-truth latent regime labels."**
+
+#### 1.2 Methodology: Why RPS Ordering Is Defined This Way
+Ranked Probability Score (RPS) penalizes probability mass proportional to squared distance across ordinal category thresholds:
+$$\text{RPS} = \frac{1}{K-1} \sum_{m=1}^{K-1} (P_m - O_m)^2, \quad \text{where } P_m = \sum_{k=1}^m p_k, \quad O_m = \sum_{k=1}^m \mathbf{1}(Y = k)$$
+The forward target classes are ordered along the monotonic return-to-risk and downside tail distress spectrum:
+$$\text{Ordinal Spectrum: } [\text{Class 0: Risk-On}] \prec [\text{Class 1: Late-Cycle}] \prec [\text{Class 3: Post-Shock}] \prec [\text{Class 2: Transitional}] \prec [\text{Class 4: Risk-Off}]$$
+- **Mathematical Justification:** Class 0 (Risk-On) has maximum expected return and low volatility ($\mathbb{E}[R] > +1\%, V \le \sigma_{\text{med}}$). Class 1 (Late-Cycle) remains positive in return but exhibits rising volatility. Class 3 (Post-Shock) has high positive rebound return ($\mathbb{E}[R] > +2\%$) but carries extreme turbulence ($V > 1.5\sigma_{\text{med}}$). Class 2 (Transitional) exhibits zero directional drift ($|R| \le 1\%$). Class 4 (Risk-Off) represents capital destruction and drawdown ($R < -1\%$).
+- **Economic Loss Alignment:** Misallocating between adjacent bull regimes (Risk-On vs. Late-Cycle) incurs a minimal cumulative penalty of 0.25 (both justify equity deployment). Predicting Risk-On when realization is Risk-Off incurs the maximum penalty of 1.0, penalizing catastrophic allocation ahead of a severe drawdown.
+
+
 ### 2. Requirement Coverage
 **94.44% of tracked requirements empirically verified (34 of 36 requirements)**, with 2 clearly identified and quarantined blockers:
 - **REQ-012 (Macro Data Feeds):** Marked `BLOCKED BY DATA` (public regulatory portals require dynamic CAPTCHA / SSL authentication; quarantined under zero-fabrication directive).
