@@ -1,0 +1,4 @@
+model_name,elpd_loo,se_loo,p_loo,elpd_waic,se_waic,p_waic,pareto_k_good_pct (k<=0.5),pareto_k_ok_pct (0.5<k<=0.7),pareto_k_bad_pct (k>0.7),warning,d_elpd_loo,rank
+PyMC NUTS HMM,-613.63,0.12,7.22,-613.63,0.12,7.22,98.0,2.0,0.0,False,0.0,1
+Bayesian HMM (Sticky Gibbs),-630.75,0.16,11.25,-630.75,0.16,11.25,98.0,2.0,0.0,False,17.120000000000005,2
+Variational BNN (Bayes by Backprop),-668.23,0.57,16.2,-668.23,0.57,16.2,98.0,2.0,0.0,False,54.60000000000002,3

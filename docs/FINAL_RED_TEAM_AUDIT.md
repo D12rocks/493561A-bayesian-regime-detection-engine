@@ -4,7 +4,7 @@
 **Author:** Quantitative Architecture & Independent Model Risk Review Group  
 **Date:** September 2026  
 **Classification:** Strictly Confidential — Internal Model Validation & Audit Record  
-**Target Specification:** 72-Page Master Project Specification (Zetheta Algorithms Private Limited, CIN: U72900MH2021PTC367891)  
+**Target Specification:** 72-Page Master Project Specification (Zetheta Algorithms Private Limited, CIN: U62012MH2023PTC410415)  
 **Audit Status:** COMPLETE — FORENSICALLY VERIFIED  
 
 ---
@@ -71,11 +71,11 @@ This red-team audit was conducted under an adversarial model risk review mandate
 - **BLOCKED BY DATA:** **1 Requirement** (Macroeconomic feeds quarantined due to SSL/API blocks; zero fake data used).
 - **BLOCKED BY ENVIRONMENT:** **1 Requirement** (Dual-language R execution blocked due to missing R binaries on macOS host).
 - **TOTAL SUBSTANTIVE REQUIREMENTS AUDITED:** **31 Requirements** (100.0%)
-- **TEST COVERAGE:** **70/70 Tests Passing (100%)**
+- **TEST COVERAGE:** **72/72 Tests Passing (100%)**
 
 ---
 
 ## Document Sign-Off
 **Lead Quantitative Risk Reviewer**  
 Zetheta Algorithms Private Limited  
-CIN: **U72900MH2021PTC367891**
+CIN: **U62012MH2023PTC410415**

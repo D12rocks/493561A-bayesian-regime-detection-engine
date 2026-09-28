@@ -1,6 +1,6 @@
 # Model Governance Card & Model Risk Validation Pack
-**Zetheta Algorithms Private Limited | Model Risk Management (MRM)**
-
+**Zetheta Algorithms Private Limited | Model Risk Management (MRM)**  
+**Corporate Identification Number (CIN):** U62012MH2023PTC410415  
 ---
 
 ## 1. Model Overview & Lineage
@@ -33,18 +33,24 @@
 ---
 
 ## 3. Probabilistic Evaluation & Benchmark Tournament
-Evaluated over out-of-sample period against mandatory reference baselines:
+Evaluated over out-of-sample period (2019–2024) against mandatory reference baselines (Persistence and Climatology). Full disaggregated audit is preserved in [`reports/tables/proper_score_skill_audit.csv`](file:///Users/dhruvarora/bayesian-regime-detection-engine/reports/tables/proper_score_skill_audit.csv):
 
-| Model / Strategy | Log Loss | Ranked Probability Score (RPS) | Brier Score | Skill vs Climatology | Skill vs Persistence | Beats Persistence Proper? |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Ensemble (Calibrated Stacking)** | **0.0011** | **0.0003** | **0.0006** | **+0.999** | **+0.995** | **YES (Champion)** |
-| **Bayesian HMM** | 0.0408 | 0.0044 | 0.0165 | +0.969 | +0.806 | **YES** |
-| **Persistence (Baseline 2)** | 0.2102 | 0.0157 | 0.0707 | +0.839 | 0.000 | Baseline |
-| **Climatology (Baseline 1)** | 1.3087 | 0.1518 | 0.7022 | 0.000 | -5.226 | Baseline |
-| **Chronos Adapter** | 1.6135 | 0.1721 | 0.8018 | -0.233 | -6.675 | NO |
-| **Bayesian DL (MC Dropout)** | 2.0340 | 0.2402 | 0.9862 | -0.554 | -8.676 | NO |
-| **RS-VAR** | 6.4185 | 0.3530 | 1.8173 | -3.904 | -29.533 | NO |
-| **Frequentist HMM** | 18.7363 | 0.3522 | 1.7177 | -13.316 | -88.129 | NO |
+| Model / Architecture | Log Loss | Brier Score | RPS | Skill vs Clim (Log Loss) | Skill vs Pers (Log Loss) | Skill vs Clim (RPS) | Skill vs Pers (RPS) | Beats Pers? (Log Loss) | Beats Pers? (RPS) |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Deep Ensemble** | 1.2847 | 0.7065 | 0.2027 | +0.0191 | +0.3268 | -0.0105 | -0.2856 | **YES** | NO |
+| **Variational BNN** | 1.3008 | 0.7112 | 0.2033 | +0.0069 | +0.3184 | -0.0134 | -0.2893 | **YES** | NO |
+| **Climatology (Baseline 1)** | 1.3097 | 0.7147 | 0.2006 | 0.0000 | +0.3137 | 0.0000 | -0.2722 | **YES** | NO |
+| **Ensemble (Calibrated Stacking)** | 1.3201 | 0.7111 | 0.2044 | -0.0079 | +0.3082 | -0.0190 | -0.2964 | **YES** | NO |
+| **Ensemble (Raw Stacking)** | 1.3205 | 0.7121 | 0.2050 | -0.0082 | +0.3080 | -0.0222 | -0.3005 | **YES** | NO |
+| **Chronos Probe** | 1.6391 | 0.8124 | 0.2112 | -0.2514 | +0.1411 | -0.0530 | -0.3396 | **YES** | NO |
+| **Persistence (Baseline 2)** | 1.9083 | 0.6981 | 0.1577 | -0.4570 | 0.0000 | +0.2140 | 0.0000 | Baseline | Baseline |
+| **Bayesian HMM (Gibbs)** | 10.6497 | 1.5873 | 0.3554 | -7.1312 | -4.5807 | -0.7718 | -1.2542 | NO | NO |
+| **TimesFM Adapter** | 11.2983 | 0.9509 | 0.2341 | -7.6264 | -4.9206 | -0.1669 | -0.4846 | NO | NO |
+| **RS-VAR** | 11.3423 | 1.6706 | 0.3299 | -7.6600 | -4.9437 | -0.6446 | -1.0924 | NO | NO |
+| **Frequentist HMM** | 18.4219 | 1.6442 | 0.3826 | -13.0653 | -8.6535 | -0.9073 | -1.4266 | NO | NO |
+
+*Audit Verification Rule:* Under $\text{Skill} = 1 - \frac{\text{Score}_{\text{model}}}{\text{Score}_{\text{ref}}}$, skill is strictly negative whenever model error exceeds reference error. Deep Ensemble beats Persistence under Log Loss (+32.68% skill) but does not beat Persistence under RPS (-28.56% skill) due to Persistence predicting adjacent CDF mass.
+
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Project:** Bayesian Regime Detection Engine for Equity Direction Forecasting (`RegimeLab`)  
 **Institution:** Zetheta Algorithms Private Limited  
-**CIN:** U72900MH2021PTC367891  
+**Corporate Identification Number (CIN):** U62012MH2023PTC410415  
 **Document Status:** Official Production Readiness & Risk Disclosure  
 
 ---

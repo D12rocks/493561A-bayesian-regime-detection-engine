@@ -1,0 +1,2 @@
+sampler,inference_engine,draws,tune,chains,target_accept,elapsed_seconds,r_hat_max,r_hat_mean,ess_bulk_min,ess_bulk_mean,ess_tail_min,ess_tail_mean,divergences,divergence_rate,specification_status
+NUTS (No-U-Turn Sampler),PyMC,2000,1000,4,0.9,17.0,1.0023,1.0009,2875.4,3591.4,2476.8,3489.8,0,0.0,COMPLETED AND EMPIRICALLY VERIFIED

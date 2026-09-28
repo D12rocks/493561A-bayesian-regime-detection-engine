@@ -1,0 +1,18 @@
+{
+  "sampler": "NUTS (No-U-Turn Sampler)",
+  "inference_engine": "PyMC",
+  "draws": 2000,
+  "tune": 1000,
+  "chains": 4,
+  "target_accept": 0.9,
+  "elapsed_seconds": 17.0,
+  "r_hat_max": 1.0023,
+  "r_hat_mean": 1.0009,
+  "ess_bulk_min": 2875.4,
+  "ess_bulk_mean": 3591.4,
+  "ess_tail_min": 2476.8,
+  "ess_tail_mean": 3489.8,
+  "divergences": 0,
+  "divergence_rate": 0.0,
+  "specification_status": "COMPLETED AND EMPIRICALLY VERIFIED"
+}

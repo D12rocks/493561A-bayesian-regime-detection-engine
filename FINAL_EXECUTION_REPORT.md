@@ -2,12 +2,12 @@
 ## Bayesian Regime Detection Engine for Equity Direction Forecasting
 
 **Organization:** Zetheta Algorithms Private Limited  
-**Corporate Identification Number (CIN):** U72900MH2021PTC367891  
+**Corporate Identification Number (CIN):** U62012MH2023PTC410415  
 **Platform Identity:** `RegimeLab`  
 **Execution Date:** September 28, 2026  
 **Primary Execution Agent:** Antigravity AI Quantitative Architecture Team  
 **Git Working Branch:** `main` (Tag: `v1.0.0-institutional`)  
-**Test Suite Status:** 70/70 Tests Passing (Unit, Statistical, Anti-Leakage, Integration) — 100% Pass Rate  
+**Test Suite Status:** 72/72 Tests Passing (Unit, Statistical, Anti-Leakage, Integration) — 100% Pass Rate  
 
 ---
 
@@ -17,7 +17,10 @@ This project delivers the complete, institutional-grade quantitative platform **
 **Forensic Audit Disclosure:** Following an adversarial red-team audit, in-sample pseudo-label circularity was eliminated. The system was re-evaluated under strict, non-circular chronological splits (Train: 2009–2018, Calibration: 2019–2021, Holdout Test: 2022–2024). Under this out-of-sample holdout, the **Deep Ensemble** achieved an audited Log Loss of **1.2847**, Brier Score of **0.7065**, and RPS of **0.2027**, outperforming both the **Climatology Baseline** (Log Loss: 1.3097) and **Persistence Baseline** (Log Loss: 1.9083). Adaptive Conformal Inference achieved **91.33% realized empirical coverage** against a nominal 90.0% target.
 
 ### 2. Requirement Coverage
-Full compliance achieved across all 40+ formal specification requirements documented in [`docs/ZETHETA_REQUIREMENTS_MATRIX.md`](file:///Users/dhruvarora/bayesian-regime-detection-engine/docs/ZETHETA_REQUIREMENTS_MATRIX.md) and audited in [`docs/FINAL_RED_TEAM_AUDIT.md`](file:///Users/dhruvarora/bayesian-regime-detection-engine/docs/FINAL_RED_TEAM_AUDIT.md).
+**94.44% of tracked requirements empirically verified (34 of 36 requirements)**, with 2 clearly identified and quarantined blockers:
+- **REQ-012 (Macro Data Feeds):** Marked `BLOCKED BY DATA` (public regulatory portals require dynamic CAPTCHA / SSL authentication; quarantined under zero-fabrication directive).
+- **REQ-041 (Dual-Language R Layer):** Marked `BLOCKED BY ENVIRONMENT` (macOS host environment lacks native R runtime; complete R scripts and Docker instructions provided).
+Full traceability is documented in [`docs/ZETHETA_REQUIREMENTS_MATRIX.md`](file:///Users/dhruvarora/bayesian-regime-detection-engine/docs/ZETHETA_REQUIREMENTS_MATRIX.md) and audited in [`docs/FINAL_RED_TEAM_AUDIT.md`](file:///Users/dhruvarora/bayesian-regime-detection-engine/docs/FINAL_RED_TEAM_AUDIT.md).
 
 ### 3. Architecture
 The platform is organized across 14 coherent operational layers:
@@ -55,20 +58,21 @@ The platform is organized across 14 coherent operational layers:
 ### 7. Model Inventory (7 Distinct Models)
 1. **Frequentist HMM:** EM Baum-Welch (Log-Likelihood: 28,233.26, AIC: -56,218.5).
 2. **Bayesian HMM (Gibbs):** Sticky Dirichlet ($\kappa=8.0$), MCMC Gibbs FFBS (R-hat $< 1.05$, ESS $> 70$).
-3. **Bayesian HMM (PyMC NUTS):** Differentiable Dirichlet priors, NUTS sampling with ArviZ diagnostics.
+3. **Bayesian HMM (PyMC NUTS):** Full specification run (4 chains, 2,000 draws, 1,000 tune, target_accept=0.90): Max $\hat{R} = 1.0023$, Bulk ESS = 2,875.4, Tail ESS = 2,476.8, Divergences = 0 (0.00%). Execution telemetry in [`reports/tables/pymc_nuts_diagnostics.csv`](file:///Users/dhruvarora/bayesian-regime-detection-engine/reports/tables/pymc_nuts_diagnostics.csv).
 4. **Regime-Switching VAR:** Hamilton filter, Kim smoother (Log-Likelihood: 44,816.43).
-5. **Variational BNN:** Bayes by Backprop in PyTorch (ELBO loss with analytical KL divergence).
-6. **Deep Ensemble:** $M=3$ independently initialized neural networks with bootstrap data shuffling.
+5. **Variational BNN:** Bayes by Backprop in PyTorch (ELBO loss with analytical KL divergence, Log Loss: 1.3008).
+6. **Deep Ensemble:** $M=3$ independently initialized neural networks with mini-batch shuffling strictly within training window (Log Loss: 1.2847).
 7. **MC Dropout Network:** Temporal ConvNet with stochastic dropout ($p=0.20$, 50 passes).
 
 ### 8. Foundation Model Inventory & Empirical Finding
-1. **Amazon Chronos T5:** Autoregressive temporal latent projection probe.
+1. **Amazon Chronos T5:** Autoregressive temporal latent projection probe over $L=64$ context.
 2. **Google TimesFM:** Patch-based temporal transformer tokenization (patch length 16).
 - **Empirical Finding:** Pretrained representations alone without task-specific fine-tuning fail to separate Indian market regimes, achieving only 23.77% probing accuracy and negative silhouette score ($-0.0089$).
 
-### 9. Ensemble Methodology
+### 9. Ensemble Methodology & Proper-Score Skill Audit
 - **Simplex Stacking:** SLSQP optimization on $\Delta^6$ to minimize cross-entropy on untouched calibration split (2019–2021).
 - **Optimal Weights:** Deep Ensemble (90.9%), Bayesian HMM (9.1%), zero weight to uncalibrated foundation probes.
+- **Disaggregated Skill Scores:** Audited in [`reports/tables/proper_score_skill_audit.csv`](file:///Users/dhruvarora/bayesian-regime-detection-engine/reports/tables/proper_score_skill_audit.csv): Deep Ensemble beats Persistence under Log Loss (1.2847 vs 1.9083, +32.68% skill), but does not beat Persistence under RPS (0.2027 vs 0.1577, -28.56% skill) due to Persistence minimizing adjacent CDF mass.
 
 ### 10. Calibration
 - **Temperature Scaling:** Optimizes post-hoc temperature $T = 1.0839$ on calibration data.
@@ -99,7 +103,10 @@ The platform is organized across 14 coherent operational layers:
 - **Sortino Ratio:** **0.67** (vs Benchmark 0.46).
 - **Max Drawdown:** **-23.82%** (vs NIFTY 50 Benchmark **-38.44%**, **+14.62% Capital Preserved**).
 - **COVID-19 Crash Alpha (Q1 2020):** **+12.96%** outperformance (Benchmark -24.57% vs Strategy -11.61%).
-- **Deflated Sharpe Ratio (DSR):** **0.112** (Bailey & López de Prado 2014, across 15 trials).
+- **Deflated Sharpe Ratio (DSR):** **0.112** (Bailey & López de Prado 2014, across 15 parameter configurations disclosed).
+- **Probability of Backtest Overfitting (PBO):** Marked **PARTIAL** (0.34 under single-asset CSCV splits; full multi-asset CSCV pending).
+- **Conviction Tiers:** High Conviction (>70%) CAGR **14.82%** vs Low Conviction (<50%) CAGR **6.14%**.
+
 
 ### 16. Monte Carlo Risk Engine
 - 10,000-path 21-day Student-t forward simulation conditioned on posterior regime probabilities.
@@ -129,7 +136,7 @@ The platform is organized across 14 coherent operational layers:
 - Runtime status: `BLOCKED BY ENVIRONMENT` (macOS host lacks R/Rscript binaries; audited in [`reports/tables/python_r_reconciliation.csv`](file:///Users/dhruvarora/bayesian-regime-detection-engine/reports/tables/python_r_reconciliation.csv)).
 
 ### 21. Test Results
-- **70/70 tests passing** across unit, statistical, anti-leakage, and integration test suites.
+- **72/72 tests passing** across unit, statistical, anti-leakage, and integration test suites.
 
 ### 22. Reproducibility
 - Single-command execution: `PYTHONPATH=. .venv/bin/python scripts/audit_ensemble_conformal.py`

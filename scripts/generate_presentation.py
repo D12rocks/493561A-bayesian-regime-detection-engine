@@ -40,7 +40,7 @@ SLIDES_CONTENT = [
         "title": "Bayesian Regime Detection Engine for Equity Direction Forecasting",
         "subtitle": "Institutional Platform Architecture, Probabilistic Calibration & Audit Defense",
         "bullets": [
-            "Organization: Zetheta Algorithms Private Limited (CIN: U72900MH2021PTC367891)",
+            "Organization: Zetheta Algorithms Private Limited (CIN: U62012MH2023PTC410415)",
             "Target Environment: Python 3.10 | Host Runtime: macOS ARM64 / Linux x86_64",
             "Release Version: v1.0.0-institutional | Verification Suite: 70/70 Tests Passing",
             "Executive Objective: Non-stationary macro regime detection & conviction-scaled asset allocation",
@@ -160,12 +160,12 @@ SLIDES_CONTENT = [
     },
     {
         "title": "12. Forensic Benchmark Tournament on Out-of-Sample Holdout",
-        "subtitle": "Untouched 2022–2024 Test Split (738 Trading Days)",
+        "subtitle": "Untouched 2022–2024 Test Split (738 Trading Days) — Proper Score Audit",
         "bullets": [
-            "Deep Ensemble: Log Loss = 1.2847, Brier = 0.7065, RPS = 0.2027 (Beats Climatology & Persistence).",
-            "Variational BNN: Log Loss = 1.3008, RPS = 0.2033 (Skill vs Climatology: +0.007, vs Persistence: +0.318).",
-            "Climatology Baseline: Log Loss = 1.3097 | Persistence Baseline: Log Loss = 1.9083.",
-            "Calibrated Stacking: Log Loss = 1.3201 (Skill vs Persistence: +0.308).",
+            "Log Loss: Deep Ensemble (1.2847) & Variational BNN (1.3008) beat Climatology (1.3097) and Persistence (1.9083).",
+            "Skill vs Persistence: Deep Ensemble achieves +32.68% skill under Log Loss (proper scoring champion).",
+            "RPS Dichotomy: Persistence achieves low RPS (0.1577) due to adjacent CDF mass; all models have negative RPS skill.",
+            "Stacking Ensemble: Simplex weights assign 90.9% to Deep Ensemble and 9.1% to Bayesian HMM (Gibbs).",
         ],
     },
     {
@@ -225,7 +225,7 @@ SLIDES_CONTENT = [
             "Contributions: Solved target circularity, established 7-model lab, proved 91.3% conformal coverage.",
             "Infrastructure: Production FastAPI service (< 5 ms online filtering) and verified Streamlit platform.",
             "Next Steps: Integration of live NSE broadcast tick feeds, tick-level order book depth, and enterprise HSM.",
-            "Corporate Verification: Zetheta Algorithms Private Limited | CIN: U72900MH2021PTC367891.",
+            "Corporate Verification: Zetheta Algorithms Private Limited | CIN: U62012MH2023PTC410415.",
         ],
     },
 ]
@@ -281,7 +281,7 @@ def generate_pptx() -> None:
         footer_box = slide.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
         ftf = footer_box.text_frame
         p_foot = ftf.paragraphs[0]
-        p_foot.text = "Zetheta Algorithms Private Limited | CIN: U72900MH2021PTC367891 | Strictly Confidential"
+        p_foot.text = "Zetheta Algorithms Private Limited | CIN: U62012MH2023PTC410415 | Strictly Confidential"
         p_foot.font.name = "Calibri"
         p_foot.font.size = Pt(9)
         p_foot.font.color.rgb = RGBColor(127, 140, 141)
@@ -347,7 +347,7 @@ def generate_pdf_slides() -> None:
             story.append(Paragraph(f"&bull; {bullet}", bullet_style))
 
         story.append(Spacer(1, 20))
-        story.append(Paragraph("Zetheta Algorithms Private Limited | CIN: U72900MH2021PTC367891 | Strictly Confidential", footer_style))
+        story.append(Paragraph("Zetheta Algorithms Private Limited | CIN: U62012MH2023PTC410415 | Strictly Confidential", footer_style))
         if i < len(SLIDES_CONTENT) - 1:
             story.append(PageBreak())
 

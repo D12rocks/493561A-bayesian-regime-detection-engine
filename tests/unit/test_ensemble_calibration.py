@@ -123,5 +123,7 @@ def test_benchmark_baselines_and_tournament():
     }
     tourn_df = BenchmarkTournament.evaluate_models(model_preds, y)
     assert len(tourn_df) >= 3
-    assert "ranked_prob_score_rps" in tourn_df.columns
-    assert "skill_vs_persistence" in tourn_df.columns
+    assert "skill_vs_persistence_log_loss" in tourn_df.columns
+    assert "skill_vs_persistence_rps" in tourn_df.columns
+    assert "beats_persistence_log_loss" in tourn_df.columns
+    assert "beats_persistence_rps" in tourn_df.columns

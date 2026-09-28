@@ -250,8 +250,11 @@ def run_forensic_audit() -> None:
     tables_dir = Path("reports/tables")
     tables_dir.mkdir(parents=True, exist_ok=True)
     audit_table_path = tables_dir / "ensemble_metric_forensic_audit.csv"
+    skill_audit_path = tables_dir / "proper_score_skill_audit.csv"
     tournament_df.to_csv(audit_table_path, index=False)
+    tournament_df.to_csv(skill_audit_path, index=False)
     print(f"\nSaved audited ensemble metrics to: {audit_table_path}")
+    print(f"Saved proper-score skill audit to: {skill_audit_path}")
 
     conformal_audit_df = pd.DataFrame([aci_audit])
     conformal_audit_df.to_csv(tables_dir / "conformal_coverage_audit.csv", index=False)

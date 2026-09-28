@@ -141,6 +141,8 @@ class BenchmarkTournament:
         # Baseline scores for skill score normalization
         clim_ll = compute_log_loss(p_clim, ground_truth)
         persist_ll = compute_log_loss(p_persist, ground_truth)
+        clim_brier = compute_brier_score(p_clim, ground_truth)
+        persist_brier = compute_brier_score(p_persist, ground_truth)
         clim_rps = compute_ranked_probability_score(p_clim, ground_truth)
         persist_rps = compute_ranked_probability_score(p_persist, ground_truth)
 
@@ -148,26 +150,39 @@ class BenchmarkTournament:
 
         for name, probs in all_candidates.items():
             ll = compute_log_loss(probs, ground_truth)
-            rps = compute_ranked_probability_score(probs, ground_truth)
             bs = compute_brier_score(probs, ground_truth)
+            rps = compute_ranked_probability_score(probs, ground_truth)
 
-            # Skill scores: 1 - Score_model / Score_baseline (positive means outperforms baseline)
+            # Skill scores: 1 - Score_model / Score_baseline (strictly negative if model score > baseline score)
             skill_clim_ll = 1.0 - (ll / max(clim_ll, 1e-6))
             skill_persist_ll = 1.0 - (ll / max(persist_ll, 1e-6))
+
+            skill_clim_brier = 1.0 - (bs / max(clim_brier, 1e-6))
+            skill_persist_brier = 1.0 - (bs / max(persist_brier, 1e-6))
+
+            skill_clim_rps = 1.0 - (rps / max(clim_rps, 1e-6))
             skill_persist_rps = 1.0 - (rps / max(persist_rps, 1e-6))
 
-            # Proper score skill check
-            beats_persistence = ll < persist_ll and rps < persist_rps
+            # Specific metric dominance flags
+            beats_persist_ll = bool(ll < persist_ll)
+            beats_persist_brier = bool(bs < persist_brier)
+            beats_persist_rps = bool(rps < persist_rps)
 
             results.append({
                 "model_name": name,
                 "log_loss": round(ll, 4),
-                "ranked_prob_score_rps": round(rps, 4),
                 "brier_score": round(bs, 4),
-                "skill_vs_climatology": round(skill_clim_ll, 3),
-                "skill_vs_persistence": round(skill_persist_ll, 3),
-                "beats_persistence_proper": beats_persistence,
+                "ranked_prob_score_rps": round(rps, 4),
+                "skill_vs_climatology_log_loss": round(skill_clim_ll, 4),
+                "skill_vs_persistence_log_loss": round(skill_persist_ll, 4),
+                "skill_vs_climatology_brier": round(skill_clim_brier, 4),
+                "skill_vs_persistence_brier": round(skill_persist_brier, 4),
+                "skill_vs_climatology_rps": round(skill_clim_rps, 4),
+                "skill_vs_persistence_rps": round(skill_persist_rps, 4),
+                "beats_persistence_log_loss": beats_persist_ll,
+                "beats_persistence_brier": beats_persist_brier,
+                "beats_persistence_rps": beats_persist_rps,
             })
 
-        df_res = pd.DataFrame(results).sort_values("ranked_prob_score_rps")
+        df_res = pd.DataFrame(results).sort_values("log_loss")
         return df_res
