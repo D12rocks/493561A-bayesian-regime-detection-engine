@@ -128,3 +128,7 @@ class RegimeConditionedSimulator(BaseRegimeSimulator):
             expected_return=round(mean_ret, 4),
             path_volatility=round(vol, 4),
         )
+
+
+# Backward-compatible alias for simulation engine
+MonteCarloRiskEngine = RegimeConditionedSimulator

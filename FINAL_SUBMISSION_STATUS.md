@@ -166,7 +166,91 @@ The system requires **only two external actions** when deployed into institution
 
 ---
 
-## 12. Whether Ownership Transfer Should Now Be Performed
+## 12. AI Product Layer (Added Post-Hardening)
+
+Two AI capabilities have been added to the RegimeLab Streamlit platform without touching any validated statistical outputs, empirical metrics, or test suite.
+
+### 12.1 AI Regime Copilot (Page 9)
+
+| Property | Detail |
+|---|---|
+| **Module** | `src/ai/` (5 files, ~600 LOC) |
+| **LLM Backend** | Ollama (local, no external transmission) → MockProvider fallback |
+| **Grounding** | All regime outputs sourced exclusively from `RegimeToolKit` (read-only) |
+| **Response Format** | MODEL OUTPUT \| CALCULATED EVIDENCE \| AI INTERPRETATION — always separated |
+| **Constraint** | LLM cannot generate or override regime probabilities — enforced via system prompt |
+| **Audit** | Every interaction logged to `logs/ai_interactions/ai_log_YYYYMMDD.jsonl` |
+| **Tests** | 37 unit tests covering tools, copilot, provider, logger |
+
+**Tools provided (read-only):**
+- `T1` Regime state for any date (posterior + conformal set)
+- `T2` Feature snapshot (point-in-time, zero lookahead)
+- `T3` SHAP attributions
+- `T4` BOCPD changepoint probability
+- `T5` Conformal prediction set with interpretive context
+- `T6` Historical analogs by regime
+- `T7` Model governance metadata
+- `T8` Backtest performance context (locked values)
+
+### 12.2 AI Scenario / Stress Lab (Page 10)
+
+| Property | Detail |
+|---|---|
+| **Parser** | Regex-first (deterministic), LLM disambiguation fallback |
+| **Shock Targets** | `vix_level`, `nifty_ret_1d`, `nifty_vol_ewma_21d`, `usdinr_ret_21d`, `breadth_midcap_ret_21d`, `nifty_dist_sma50` |
+| **Confirmation Step** | Parsed shock table shown before simulation — user must explicitly confirm |
+| **Synthetic Flag** | All outputs explicitly labelled SYNTHETIC SIMULATION throughout UI |
+| **Presets** | 6 pre-built macro shock scenarios (VIX spike, NIFTY crash, FX shock, combined) |
+| **Risk Output** | Regime probability delta table (stressed − baseline) + parametric VaR/CVaR fallback |
+| **Tests** | 9 parser unit tests, including all 6 preset scenarios |
+
+### 12.3 AI Layer Hardening Guarantees
+
+The AI Copilot and Scenario Lab have undergone a comprehensive forensic hardening pass before final freeze:
+
+1. **Zero Synthetic / Representative Model Evidence Fallbacks**:
+   - `_STATIC_SHAP` completely eliminated; missing SHAP artifacts for any requested date strictly return `{"status": "UNAVAILABLE"}`.
+   - BOCPD fallback `cp_prob = 0.42` eliminated; absent changepoint signals strictly return `{"status": "UNAVAILABLE"}`.
+   - `UNAVAILABLE` is never interpreted by Copilot as zero, default, or estimated.
+
+2. **Purge of Stale Governance Metrics**:
+   - Superseded metrics from earlier circular evaluation (`proper_rps = 0.0003`, `ece = 0.0014`, `0.0011`) are strictly prohibited in the AI layer.
+   - Fallback loads actual current governance artifact (`reports/tables/proper_score_skill_audit.csv`) or returns explicit `UNAVAILABLE`.
+   - Programmatic validator flags any response quoting stale metrics.
+
+3. **Strict Source Status Contract**:
+   - Every evidence object exposed to LLM strictly includes `source`, `status`, `timestamp`, and `provenance`.
+   - Allowed statuses: `VERIFIED`, `UNAVAILABLE`, `QUARANTINED`, `SYNTHETIC_SCENARIO`.
+
+4. **Programmatic Grounding Validation (`ResponseValidator`)**:
+   - Programmatically verifies LLM claims against authoritative evidence before display.
+   - Validates dominant regime, regime probabilities, changepoint probability, conformal set size/membership, and locked backtest metrics.
+   - Flags responses with unsupported numerical claims (`is_trusted = False`) and displays a safe ungrounded notice.
+
+5. **Scenario Lab Architecture**:
+   - Explicit pre-execution display of **PARSED SCENARIO**, **BASELINE DATA**, **SHOCK VECTOR**, and **SIMULATION ENGINE USED**.
+   - Strict distinction between **FULL MONTE CARLO** and **PARAMETRIC FALLBACK** (parametric fallback is never presented as Monte Carlo).
+   - Every result is tagged `scenario_type = "SYNTHETIC_NL_STRESS"` with visible banner `HYPOTHETICAL SCENARIO — NOT A FORECAST`.
+
+6. **USD/INR Sign Semantics**:
+   - Formally disambiguates: "USD/INR increases" (delta > 0, Rupee weakens) vs "USD/INR decreases" (delta < 0, Rupee strengthens).
+   - Inverts direction for Rupee-subject clauses: "rupee appreciates" (delta < 0) vs "USD/INR appreciates" (delta > 0).
+
+7. **Auditability**:
+   - Every Copilot response logs: `date`, `provider`, `model_name`/`model_version`, `user_query`, `evidence_bundle_hash`, `response_hash`, `evidence_source_statuses`, `scenario_id`.
+   - SHA-256 cryptographic hashes provide verifiable audit linkage without storing proprietary raw evidence.
+
+### 12.4 Test Suite Summary
+
+| Scope | Count | Status |
+|---|---|---|
+| Prior institutional core tests | 72 | ✅ 72 passed |
+| AI layer hardening & grounding tests (`tests/test_ai_layer.py`) | 25 | ✅ 25 passed |
+| **Total Test Suite** | **97** | **✅ 97 / 97 passing (100% green)** |
+
+---
+
+## 13. Whether Ownership Transfer Should Now Be Performed
 
 **RECOMMENDATION: DO NOT INITIATE GITHUB OWNERSHIP TRANSFER YET.**
 
