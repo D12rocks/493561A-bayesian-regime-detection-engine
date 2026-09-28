@@ -531,6 +531,32 @@ class TestScenarioLabSimulationEngine:
         assert fallback_result.is_monte_carlo is False
         assert "Monte Carlo" not in fallback_result.engine_used
 
+    def test_baseline_provenance_distinguishes_verified_vs_synthetic(
+        self, parsed_scenario, baseline_features
+    ):
+        """Simulation result must explicitly label baseline provenance."""
+        # When real baseline probabilities are supplied
+        real_probs = {"Risk-On": 0.05, "Late-Cycle": 0.05, "Transitional": 0.10, "Post-Shock": 0.80, "Risk-Off": 0.00}
+        verified_res: ScenarioSimulationResult = simulate_scenario(
+            parsed=parsed_scenario,
+            baseline_features=baseline_features,
+            baseline_probs=real_probs,
+            baseline_provenance="VERIFIED MODEL OUTPUT",
+        )
+        assert verified_res.baseline_provenance == "VERIFIED MODEL OUTPUT"
+        assert verified_res.baseline_regime == "Post-Shock"
+        assert verified_res.baseline_prob == 0.80
+
+        # When no baseline probabilities are supplied (synthetic demo fallback)
+        synthetic_res: ScenarioSimulationResult = simulate_scenario(
+            parsed=parsed_scenario,
+            baseline_features=baseline_features,
+            baseline_probs=None,
+        )
+        assert synthetic_res.baseline_provenance == "SYNTHETIC DEMO BASELINE"
+        assert synthetic_res.baseline_regime == "Risk-On"
+        assert synthetic_res.baseline_prob == 0.20
+
 
 # ===========================================================================
 # 6. RegimeCopilot Integration Tests

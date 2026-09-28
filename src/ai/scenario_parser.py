@@ -104,6 +104,7 @@ class ScenarioSimulationResult:
     engine_used: str = "FULL MONTE CARLO"  # "FULL MONTE CARLO" or "PARAMETRIC FALLBACK"
     is_monte_carlo: bool = True
     status: str = "SYNTHETIC_SCENARIO"
+    baseline_provenance: str = "VERIFIED MODEL OUTPUT"  # "VERIFIED MODEL OUTPUT" or "SYNTHETIC DEMO BASELINE"
     baseline_regime: str = ""
     baseline_prob: float = 0.0
     stressed_dominant_regime: str = ""
@@ -510,6 +511,7 @@ def simulate_scenario(
     baseline_features: Dict[str, float],
     baseline_probs: Optional[Dict[str, float]] = None,
     force_parametric: bool = False,
+    baseline_provenance: Optional[str] = None,
 ) -> ScenarioSimulationResult:
     """
     Execute stress simulation with strict distinction between FULL MONTE CARLO
@@ -529,8 +531,10 @@ def simulate_scenario(
     regime_names_ordered = ["Risk-On", "Late-Cycle", "Transitional", "Post-Shock", "Risk-Off"]
     if baseline_probs:
         bl_probs_arr = np.array([baseline_probs.get(r, 0.2) for r in regime_names_ordered])
+        provenance = baseline_provenance or "VERIFIED MODEL OUTPUT"
     else:
         bl_probs_arr = np.ones(5) / 5.0
+        provenance = baseline_provenance or "SYNTHETIC DEMO BASELINE"
     bl_probs_arr /= bl_probs_arr.sum()
 
     bl_dom_idx = int(np.argmax(bl_probs_arr))
@@ -612,6 +616,7 @@ def simulate_scenario(
         engine_used=engine_used,
         is_monte_carlo=is_mc,
         status="SYNTHETIC_SCENARIO",
+        baseline_provenance=provenance,
         baseline_regime=bl_regime,
         baseline_prob=bl_prob,
         stressed_dominant_regime=s_dom_regime,

@@ -566,13 +566,32 @@ elif nav_choice == "10. 🧪 AI Scenario / Stress Lab":
         parse_btn = st.button("🔍 Parse Scenario", type="primary")
 
         if parse_btn and shock_input.strip():
-            # Get baseline features
+            # Get baseline features and model state
             current_features: dict = {}
+            baseline_dom_regime: str = ""
+            baseline_dom_prob: float = 0.0
+            baseline_provenance: str = "SYNTHETIC DEMO BASELINE"
+
             if not feats_df.empty:
                 try:
                     ts = pd.to_datetime(baseline_date)
                     idx = feats_df.index.get_indexer([ts], method="nearest")[0]
                     current_features = feats_df.iloc[idx].to_dict()
+                except Exception:
+                    pass
+
+            if not cal_preds_df.empty:
+                try:
+                    from src.ai.tools import RegimeToolKit
+                    _tk = RegimeToolKit(cal_preds_df=cal_preds_df, features_df=feats_df)
+                    _b_state = _tk.get_regime_state(baseline_date)
+                    baseline_dom_regime = _b_state.get("dominant_regime", "")
+                    baseline_dom_prob = _b_state.get("dominant_prob", 0.0)
+                    baseline_provenance = (
+                        "VERIFIED MODEL OUTPUT"
+                        if _b_state.get("status") == "VERIFIED"
+                        else "SYNTHETIC DEMO BASELINE"
+                    )
                 except Exception:
                     pass
 
@@ -582,6 +601,9 @@ elif nav_choice == "10. 🧪 AI Scenario / Stress Lab":
             st.session_state["stress_parsed"] = parsed
             st.session_state["stress_baseline_date"] = baseline_date
             st.session_state["stress_baseline_features"] = current_features
+            st.session_state["stress_baseline_dom_regime"] = baseline_dom_regime
+            st.session_state["stress_baseline_dom_prob"] = baseline_dom_prob
+            st.session_state["stress_baseline_provenance"] = baseline_provenance
 
         # --- Parsed scenario confirmation panel ---
         if "stress_parsed" in st.session_state:
@@ -609,7 +631,14 @@ elif nav_choice == "10. 🧪 AI Scenario / Stress Lab":
                     st.markdown("#### 📅 BASELINE DATA")
                     baseline_features = st.session_state.get("stress_baseline_features", {})
                     baseline_date_str = st.session_state.get("stress_baseline_date", "")
+                    baseline_prov = st.session_state.get("stress_baseline_provenance", "VERIFIED MODEL OUTPUT")
+                    baseline_dom = st.session_state.get("stress_baseline_dom_regime", "")
+                    baseline_p = st.session_state.get("stress_baseline_dom_prob", 0.0)
+
                     st.write(f"- **Baseline Date:** `{baseline_date_str}`")
+                    st.write(f"- **Baseline Provenance:** `{baseline_prov}`")
+                    if baseline_dom:
+                        st.write(f"- **Model Regime State:** **{baseline_dom}** ({baseline_p*100:.1f}%)")
                     if baseline_features:
                         key_feats = {
                             k: round(v, 4)
@@ -656,11 +685,17 @@ elif nav_choice == "10. 🧪 AI Scenario / Stress Lab":
                     toolkit = RegimeToolKit(cal_preds_df=cal_preds_df, features_df=feats_df)
                     baseline_regime = toolkit.get_regime_state(baseline_date_str)
                     bl_probs = baseline_regime.get("regime_probabilities", {})
+                    prov = (
+                        "VERIFIED MODEL OUTPUT"
+                        if baseline_regime.get("status") == "VERIFIED"
+                        else "SYNTHETIC DEMO BASELINE"
+                    )
 
                     sim_res: ScenarioSimulationResult = simulate_scenario(
                         parsed=parsed,
                         baseline_features=baseline_features,
                         baseline_probs=bl_probs,
+                        baseline_provenance=prov,
                     )
 
                     st.subheader("3. Simulation Results")
@@ -682,10 +717,10 @@ elif nav_choice == "10. 🧪 AI Scenario / Stress Lab":
                     regime_names_ordered = ["Risk-On", "Late-Cycle", "Transitional", "Post-Shock", "Risk-Off"]
 
                     with sim_c1:
-                        st.markdown("### 📊 Baseline (Current State)")
+                        st.markdown(f"### 📊 Baseline ({sim_res.baseline_provenance})")
                         bl_regime = sim_res.baseline_regime or "—"
                         bl_prob = sim_res.baseline_prob
-                        st.metric("Dominant Regime", bl_regime, f"{bl_prob*100:.1f}%")
+                        st.metric("Dominant Regime", bl_regime, f"{bl_prob*100:.1f}% ({sim_res.baseline_provenance})")
                         bl_entropy = baseline_regime.get("predictive_entropy", 0.0)
                         st.metric("Predictive Entropy", f"{bl_entropy:.3f} nats")
                         if bl_probs:
