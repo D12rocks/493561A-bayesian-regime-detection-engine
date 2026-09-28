@@ -12,12 +12,18 @@ Implements REQ-100 to REQ-108:
 - Page 8: Regime Arena (Gamified Quantitative Trader Experience)
 """
 
+import sys
 from datetime import datetime
 from pathlib import Path
 import json
 import numpy as np
 import pandas as pd
 import streamlit as st
+
+# Ensure repository root is on sys.path so 'src' is always importable
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 # Styling & Config
 st.set_page_config(
