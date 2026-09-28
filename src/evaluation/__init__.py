@@ -17,6 +17,8 @@ from src.evaluation.baselines import (
     compute_brier_score,
 )
 
+from src.evaluation.information_criteria import BayesianInformationCriteria
+
 __all__ = [
     "compute_expected_calibration_error",
     "compute_multi_class_brier_score",
@@ -28,4 +30,5 @@ __all__ = [
     "compute_log_loss",
     "compute_ranked_probability_score",
     "compute_brier_score",
+    "BayesianInformationCriteria",
 ]

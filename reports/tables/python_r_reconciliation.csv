@@ -1,0 +1,4 @@
+model_family,python_implementation,r_implementation,frobenius_tolerance,runtime_status,host_blocker,python_log_likelihood,r_log_likelihood,numerical_parity_result
+Gaussian HMM (5-Regime),src/models/frequentist_hmm.py (hmmlearn),R/models/hmm_depmixs4.R (depmixS4),0.05,BLOCKED BY ENVIRONMENT,R / Rscript binaries not installed in host PATH,28233.26,BLOCKED,BLOCKED_ENVIRONMENT
+Markov-Switching VAR(1),src/models/rs_var.py (Hamilton/Kim Smoother),R/models/ms_var.R (MSwM / MSwM2),0.08,BLOCKED BY ENVIRONMENT,R / Rscript binaries not installed in host PATH,44816.43,BLOCKED,BLOCKED_ENVIRONMENT
+Bayesian HMM (MCMC),src/models/bayesian_hmm.py (Gibbs FFBS),R/reconciliation/reconcile_python_r.R (rjags/brms),0.1,BLOCKED BY ENVIRONMENT,R / Rscript binaries not installed in host PATH,28410.5,BLOCKED,BLOCKED_ENVIRONMENT

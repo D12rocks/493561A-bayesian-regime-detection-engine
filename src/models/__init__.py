@@ -12,9 +12,13 @@ from src.models.contracts import (
 )
 from src.models.frequentist_hmm import FrequentistHMM
 from src.models.bayesian_hmm import BayesianHMM
+from src.models.pymc_hmm import PyMCBayesianRegimeModel
 from src.models.rs_var import RegimeSwitchingVAR
 from src.models.bayesian_dl import BayesianDeepLearningModel
+from src.models.variational_bnn import VariationalBNNModel
+from src.models.deep_ensemble import DeepEnsembleModel
 from src.models.foundation.probing import ChronosRegimeAdapter
+from src.models.foundation.timesfm_adapter import TimesFMRegimeAdapter
 from src.models.duration import RegimeDurationAnalyzer
 
 __all__ = [
@@ -26,8 +30,12 @@ __all__ = [
     "UncertaintyMetrics",
     "FrequentistHMM",
     "BayesianHMM",
+    "PyMCBayesianRegimeModel",
     "RegimeSwitchingVAR",
     "BayesianDeepLearningModel",
+    "VariationalBNNModel",
+    "DeepEnsembleModel",
     "ChronosRegimeAdapter",
+    "TimesFMRegimeAdapter",
     "RegimeDurationAnalyzer",
 ]
