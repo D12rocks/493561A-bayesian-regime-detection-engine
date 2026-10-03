@@ -46,99 +46,132 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-    html, body, [class*="css"] {
+    html, body, [class*="css"], .stMarkdown {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #f8fafc;
     }
 
     code, pre {
         font-family: 'JetBrains Mono', monospace !important;
     }
 
-    /* Executive Theme Palette */
-    :root {
-        --bg-obsidian: #0b0f19;
-        --card-bg: #ffffff;
-        --card-border: #e2e8f0;
-        --brand-primary: #0284c7;
-        --regime-risk-on: #10b981;
-        --regime-late-cycle: #f59e0b;
-        --regime-trans: #38bdf8;
-        --regime-post-shock: #a855f7;
-        --regime-risk-off: #f43f5e;
-    }
-
-    /* Page Guide Banner Styling */
+    /* Page Guide Banner Styling - Pure Institutional Dark Glass */
     .page-guide-card {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border: 1px solid #cbd5e1;
-        border-left: 5px solid #0284c7;
+        background: linear-gradient(135deg, rgba(19, 27, 46, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.28) !important;
+        border-left: 5px solid #38bdf8 !important;
         border-radius: 10px;
-        padding: 16px 20px;
+        padding: 18px 22px;
         margin-bottom: 22px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
     .guide-title {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 6px;
+        color: #f8fafc !important;
+        margin-bottom: 8px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
     }
     .guide-badge {
         font-size: 11px;
-        font-weight: 600;
-        padding: 2px 8px;
+        font-weight: 700;
+        padding: 3px 10px;
         border-radius: 9999px;
-        background: #e0f2fe;
-        color: #0369a1;
+        background: rgba(56, 189, 248, 0.15) !important;
+        color: #38bdf8 !important;
+        border: 1px solid rgba(56, 189, 248, 0.35) !important;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
     .guide-body {
-        font-size: 13.5px;
-        color: #334155;
-        line-height: 1.55;
+        font-size: 14px;
+        color: #cbd5e1 !important;
+        line-height: 1.6;
+    }
+    .guide-body strong {
+        color: #f8fafc !important;
     }
     .guide-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 10px;
+        gap: 14px;
+        margin-top: 12px;
         font-size: 13px;
     }
     .guide-item {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        padding: 8px 12px;
+        background: rgba(11, 15, 25, 0.85) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: #e2e8f0 !important;
     }
     .guide-item-title {
         font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 2px;
+        color: #38bdf8 !important;
+        margin-bottom: 4px;
+        font-size: 13.5px;
+    }
+    .guide-item ul {
+        margin: 6px 0 0 18px;
+        padding: 0;
+        color: #cbd5e1 !important;
+    }
+    .guide-item li {
+        margin-bottom: 4px;
+        color: #cbd5e1 !important;
+    }
+    .guide-section-label {
+        margin-top: 14px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #94a3b8 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    /* Metric Cards */
+    /* Metric Cards - Deep Obsidian with Razor-Sharp Typography */
     .stMetric {
-        background: #ffffff;
-        padding: 14px 18px;
-        border-radius: 10px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        background: linear-gradient(145deg, #131b2e 0%, #0f172a 100%) !important;
+        padding: 16px 20px !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(56, 189, 248, 0.2) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     }
     .stMetric:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+        border-color: rgba(56, 189, 248, 0.45) !important;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #94a3b8 !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.3px;
+    }
+    [data-testid="stMetricLabel"] * {
+        color: #94a3b8 !important;
+    }
+    [data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-size: 26px !important;
+        font-weight: 800 !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    [data-testid="stMetricValue"] * {
+        color: #ffffff !important;
+    }
+    [data-testid="stMetricDelta"] {
+        font-weight: 600 !important;
     }
 
     /* Regime Badges */
     .badge-on { background-color: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
     .badge-off { background-color: #f43f5e; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
-    .badge-trans { background-color: #38bdf8; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
-    .badge-late { background-color: #f59e0b; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
+    .badge-trans { background-color: #38bdf8; color: #0b0f19; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
+    .badge-late { background-color: #f59e0b; color: #0b0f19; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
     .badge-shock { background-color: #a855f7; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
 
     /* Live Heartbeat Indicator */
@@ -160,13 +193,21 @@ st.markdown("""
 
     /* Portfolio Calculator Box */
     .pnl-calculator-box {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        color: #f8fafc;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+        color: #f8fafc !important;
         border-radius: 10px;
         padding: 20px;
-        border: 1px solid #334155;
+        border: 1px solid rgba(56, 189, 248, 0.25) !important;
         margin-top: 14px;
         margin-bottom: 18px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
+    
+    /* Expanders and Containers */
+    div[data-testid="stExpander"] {
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        background: rgba(19, 27, 46, 0.6) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -187,7 +228,7 @@ def render_page_guide(
     """Renders a structured, executive operational guide at the top of each page."""
     actions_html = "".join([f"<li>{a}</li>" for a in actions])
     metrics_html = "".join([
-        f"<div class='guide-item'><div class='guide-item-title'>{k}</div><div>{v}</div></div>"
+        f"<div class='guide-item'><div class='guide-item-title'>{k}</div><div style='color: #cbd5e1;'>{v}</div></div>"
         for k, v in metrics_dict.items()
     ])
     
@@ -203,19 +244,19 @@ def render_page_guide(
         <div class="guide-grid">
             <div class="guide-item">
                 <div class="guide-item-title">⚡ Interactive Capabilities on this Page:</div>
-                <ul style="margin: 4px 0 0 16px; padding: 0;">
+                <ul style="margin: 6px 0 0 16px; padding: 0;">
                     {actions_html}
                 </ul>
             </div>
             <div class="guide-item">
                 <div class="guide-item-title">💡 Portfolio Manager Pro-Tip:</div>
-                <div style="margin-top: 4px; font-style: italic;">{pro_tip}</div>
+                <div style="margin-top: 6px; font-style: italic; color: #cbd5e1;">{pro_tip}</div>
             </div>
         </div>
-        <div style="margin-top: 10px; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase;">
+        <div class="guide-section-label">
             📖 Key Metrics Dictionary:
         </div>
-        <div class="guide-grid" style="margin-top: 6px;">
+        <div class="guide-grid" style="margin-top: 8px;">
             {metrics_html}
         </div>
     </div>
@@ -260,12 +301,35 @@ def build_altair_simplex_chart(probs: List[float], regime_names: List[str], heig
         "Regime": regime_names,
         "Probability": [float(p) for p in probs],
         "Label": [format_prob_display(p) for p in probs],
-        "Color": [color_map.get(r, "#0284c7") for r in regime_names],
+        "Color": [color_map.get(r, "#38bdf8") for r in regime_names],
     })
     
     base = alt.Chart(chart_data).encode(
-        x=alt.X("Regime:N", sort=None, axis=alt.Axis(labelAngle=0, title=None, labelFont="Plus Jakarta Sans", labelFontWeight="bold")),
-        y=alt.Y("Probability:Q", scale=alt.Scale(domain=[0.0, 1.0]), axis=alt.Axis(format="%", title="Posterior Probability")),
+        x=alt.X(
+            "Regime:N",
+            sort=None,
+            axis=alt.Axis(
+                labelAngle=0,
+                title=None,
+                labelFont="Plus Jakarta Sans",
+                labelFontWeight="bold",
+                labelColor="#cbd5e1",
+                domainColor="#334155",
+                tickColor="#334155",
+            ),
+        ),
+        y=alt.Y(
+            "Probability:Q",
+            scale=alt.Scale(domain=[0.0, 1.0]),
+            axis=alt.Axis(
+                format="%",
+                title="Posterior Probability",
+                titleColor="#94a3b8",
+                labelColor="#94a3b8",
+                domainColor="#334155",
+                gridColor="rgba(255, 255, 255, 0.08)",
+            ),
+        ),
         color=alt.Color("Color:N", scale=None),
         tooltip=["Regime:N", "Label:N"],
     ).properties(height=height)
@@ -274,14 +338,14 @@ def build_altair_simplex_chart(probs: List[float], regime_names: List[str], heig
     labels = base.mark_text(
         align="center",
         baseline="bottom",
-        dy=-5,
+        dy=-6,
         font="JetBrains Mono",
         fontWeight="bold",
-        fontSize=11,
-        color="#1e293b",
+        fontSize=12,
+        color="#ffffff",
     ).encode(text="Label:N")
 
-    return bars + labels
+    return (bars + labels).configure_view(strokeWidth=0)
 
 
 @st.cache_data
@@ -323,10 +387,10 @@ nav_choice = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
-<div style="font-size: 12px; color: #475569; line-height: 1.4;">
-    <div><strong>Inference Mode:</strong> <span class="pulse-dot"></span>Local Ollama (Llama 3.2)</div>
-    <div style="margin-top: 4px;"><strong>Data Isolation:</strong> 100% On-Premise</div>
-    <div style="margin-top: 4px;"><strong>Test Suite:</strong> 135 / 135 Tests Passing</div>
+<div style="font-size: 12px; color: #94a3b8; line-height: 1.5; background: rgba(19, 27, 46, 0.7); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.2);">
+    <div><strong style="color: #f8fafc;">Inference Mode:</strong> <span class="pulse-dot"></span><span style="color: #38bdf8;">Local Ollama (Llama 3.2)</span></div>
+    <div style="margin-top: 5px;"><strong style="color: #f8fafc;">Data Isolation:</strong> <span style="color: #10b981; font-weight: 600;">100% On-Premise</span></div>
+    <div style="margin-top: 5px;"><strong style="color: #f8fafc;">Test Suite:</strong> <span style="color: #38bdf8; font-weight: 600;">135 / 135 Passing</span></div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -806,8 +870,8 @@ elif nav_choice == "9. 🤖 AI Regime Copilot":
         provider_badge = copilot.provider_name
         if "Ollama" in provider_badge:
             st.markdown(f"""
-            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 13.5px; color: #166534;">
-                <span class="pulse-dot"></span><strong>Provider: {provider_badge}</strong> — Local On-Device LLM Active. 100% Confidential / Zero External Network Calls.
+            <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 12px 18px; margin-bottom: 16px; font-size: 13.5px; color: #34d399;">
+                <span class="pulse-dot"></span><strong style="color: #6ee7b7;">Provider: {provider_badge}</strong> — Local On-Device LLM Active. 100% Confidential / Zero External Network Calls.
             </div>
             """, unsafe_allow_html=True)
         else:
